@@ -155,10 +155,22 @@ MonoBehaviour:
   size: {x: 3, y: 4}
   startPos: 0
   rooms:
-  - {fileID: 8779568360426452266, guid: ce608fe97cc0d194abe3b145b087a8ab, type: 3}
-  - {fileID: 8779568360426452266, guid: b7b12059fb1a7ce438d8a5a6c6e22642, type: 3}
-  - {fileID: 8779568360426452266, guid: a79cd4d1fbd8f9444a492acabefb083a, type: 3}
-  - {fileID: 8779568360426452266, guid: c815a65078696554fa1e3d94c5d4fe6c, type: 3}
+  - room: {fileID: 8779568360426452266, guid: ce608fe97cc0d194abe3b145b087a8ab, type: 3}
+    minPosition: {x: 0, y: 0}
+    maxPosition: {x: 2, y: 3}
+    obligatory: 0
+  - room: {fileID: 8779568360426452266, guid: b7b12059fb1a7ce438d8a5a6c6e22642, type: 3}
+    minPosition: {x: 0, y: 0}
+    maxPosition: {x: 2, y: 3}
+    obligatory: 0
+  - room: {fileID: 8779568360426452266, guid: a79cd4d1fbd8f9444a492acabefb083a, type: 3}
+    minPosition: {x: 0, y: 0}
+    maxPosition: {x: 2, y: 3}
+    obligatory: 0
+  - room: {fileID: 8779568360426452266, guid: c815a65078696554fa1e3d94c5d4fe6c, type: 3}
+    minPosition: {x: 2, y: 3}
+    maxPosition: {x: 2, y: 3}
+    obligatory: 1
   offset: {x: 16, y: 16}
 --- !u!4 &474677472
 Transform:
