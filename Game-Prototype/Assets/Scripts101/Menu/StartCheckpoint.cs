@@ -4,9 +4,9 @@ using UnityEngine;
 public class StartCheckpoint : MonoBehaviour
 {
     public GameObject playerPrefab;
-    void Awake()
+    void Start()
     {
-        GameObject player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
+        Instantiate(playerPrefab, transform.position, Quaternion.identity);
 
         GameSystem.Instance.ResetTimer();
         GameSystem.Instance.StartTimer();
