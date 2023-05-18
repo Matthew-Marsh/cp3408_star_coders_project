@@ -10,14 +10,16 @@ public class EnemyAI : MonoBehaviour
     public bool onCoolDown = false;
     private bool waitingForCoolDown = false;
     private bool playerInRange = false;
-    private int coolDownTimer;
+    private bool playerIsSeen = false;
     private SphereCollider rangeCollider;
+    private PlayerHealthController playerHealth;
 
     [Header("Combat Settings")]
     public int currentHealth = 100;
     public int maxHealth = 100;
     public int attackTimer = 1;
     public float attackRange = 2;
+    public float attackDamage = 10;
 
     [Header("Roam Settings")]
     Vector3 roamGoal;
@@ -45,6 +47,7 @@ public class EnemyAI : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player");
         }
+        playerHealth = player.gameObject.GetComponent<PlayerHealthController>();
 
         // Setting up Combat stats
         currentHealth = maxHealth;
@@ -54,7 +57,6 @@ public class EnemyAI : MonoBehaviour
         rangeCollider.center = Vector3.zero;
         rangeCollider.radius = attackRange;
         rangeCollider.isTrigger = true;
-
 
         // Behaviour Tree to Control Behaviours
         tree = new BehaviourTree();
@@ -107,28 +109,15 @@ public class EnemyAI : MonoBehaviour
 
     public Node.Status playerSeen()
     {
-
-        RaycastHit raycastInfo;
-        Vector3 rayToTarget = player.transform.position - this.transform.position;
-
-        // Check Distance to target first (Replicating "hearing" player)
-        if (playerInRange && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
+        if (playerInRange)
         {
-            if (raycastInfo.transform.gameObject.tag == "Player")
-            {
-                return Node.Status.SUCCESS;
-            }
+            return Node.Status.SUCCESS;
         }
-
-        // Check if Player is in sight of enemy instead.
-        float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
-        if (lookAngle < 90 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
+        else if (playerIsSeen)
         {
-            if (raycastInfo.transform.gameObject.tag == "Player")
-            {
-                return Node.Status.SUCCESS;
-            }
+            return Node.Status.SUCCESS;
         }
+        
         return Node.Status.FAILURE;
     }
 
@@ -136,29 +125,29 @@ public class EnemyAI : MonoBehaviour
     {
         if (!playerInRange) return Node.Status.FAILURE;
 
-        if (onCoolDown)
+        if (playerHealth.health == 0) return Node.Status.FAILURE;
+
+        if (playerInRange && playerIsSeen)
         {
-            if (!waitingForCoolDown)
+            this.transform.LookAt(player.transform.position);
+            if (onCoolDown)
             {
-                Invoke("coolDown", attackTimer);
-                waitingForCoolDown = true;
+                if (!waitingForCoolDown)
+                {
+                    if (player != null && playerHealth.health > 0)
+                    {
+                        playerHealth.health -= attackDamage;
+                        if (playerHealth.health < 0)
+                        {
+                            playerHealth.health = 0;
+                        }
+                    }
+                    Invoke("coolDown", attackTimer);
+                    waitingForCoolDown = true;
+                }
             }
-            return Node.Status.FAILURE;
-        }
-
-
-        RaycastHit raycastInfo;
-        Vector3 rayToTarget = player.transform.position - this.transform.position;
-
-        if (playerInRange && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
-        {
-            if (raycastInfo.transform.gameObject.tag == "Player")
-            {
-                this.transform.LookAt(player.transform.position);
-                Debug.Log("Attack");
-                onCoolDown = true;
-                return Node.Status.SUCCESS;
-            }
+            onCoolDown = true;
+            return Node.Status.SUCCESS;
         }
         return Node.Status.FAILURE;
     }
@@ -226,12 +215,37 @@ public class EnemyAI : MonoBehaviour
             state = ActionState.IDLE;
             return Node.Status.FAILURE;
         }
-        else if ( distanceToTarget < 3)
+        else if ( distanceToTarget < 3 || playerIsSeen)
         {
             state = ActionState.IDLE;
             return Node.Status.SUCCESS;
         }
         return Node.Status.RUNNING;
+    }
+
+    void canSeePlayer()
+    {
+        if (!playerIsSeen) { 
+            RaycastHit raycastInfo;
+            Vector3 rayToTarget = player.transform.position - this.transform.position;
+
+            // Check if Player is in sight of enemy instead.
+            float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
+            if (lookAngle < 65 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
+            {
+                if (raycastInfo.transform.gameObject.tag == "Player")
+                {
+                    playerIsSeen = true;
+                    Invoke("resetPlayerSeen", 2);
+                    return;
+                }
+            }
+        }
+    }
+
+    void resetPlayerSeen()
+    {
+        playerIsSeen = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -259,12 +273,7 @@ public class EnemyAI : MonoBehaviour
             GameObject.Destroy(this.gameObject);
         }
     }
-
-    void Update()
-    {
-        treeStatus = tree.Process();
-    }
-
+    
     void coolDown()
     {
         if (onCoolDown)
@@ -274,5 +283,10 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        canSeePlayer();
+        treeStatus = tree.Process();
+    }
 
 }
