@@ -9,11 +9,13 @@ public class PlayerController : MonoBehaviour
     private Camera mainCamera;
     Animator anim;
     bool isSprinting;
+    GameObject weapon;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        weapon = GameObject.FindGameObjectWithTag("Weapon");
+        weapon.GetComponent<BoxCollider>().enabled = false;
         rb = GetComponent<Rigidbody>();
         mainCamera = FindObjectOfType<Camera>();
         anim = this.GetComponent<Animator>();
@@ -102,6 +104,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void DisableWeaponBoxCollider()
+    {
+        weapon.GetComponent<BoxCollider>().enabled = false;
+    }
+
+    void EnableWeaponBoxCollider()
+    {
+        weapon.GetComponent<BoxCollider>().enabled = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -110,7 +122,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             anim.Play("MeeleeAttack_TwoHanded");
-
+            Invoke("EnableWeaponBoxCollider", 1);
+            Invoke("DisableWeaponBoxCollider", 2);
         }
 
         Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
