@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class MeleeCollision : MonoBehaviour
 {
+    public float damage;
+
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Enter");
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Enter");
+            GameObject enemy = collision.gameObject;
+            enemy.GetComponent<PlayerHealthController>().TakeDamage(damage);
+        }
     }
 }
