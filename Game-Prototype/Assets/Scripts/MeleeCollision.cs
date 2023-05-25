@@ -4,34 +4,31 @@ using UnityEngine;
 
 public class MeleeCollision : MonoBehaviour
 {
-    public float damage;
-   // GameObject weapon;
-   /*
-    void start()
-    {
-        weapon = GameObject.FindGameObjectWithTag("Weapon");
-        weapon.GetComponent<BoxCollider>().enabled = false;
-    }
-   */
+    public int damage;
+    bool isDamageAvailable = true;
+    public float coolDownDuration = 2.0f;
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (isDamageAvailable == false)
+        {
+            return;
+        }
+
+        // If object collision is tagged with Enemy then enemy takes damage and put on cooldown
         if (collision.gameObject.tag == "Enemy")
         {
             Debug.Log("Enter");
             GameObject enemy = collision.gameObject;
-            enemy.GetComponent<PlayerHealthController>().TakeDamage(damage);
+            //enemy.GetComponent<EnemyAI>().TakeDamage(damage);
+            StartCoroutine(StartCooldown());
         }
     }
 
-    /* Produces null refrence error, code would work better than current solution
-    void OnTriggerExit(Collider collision)
+    public IEnumerator StartCooldown()
     {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("Exit");
-            weapon.GetComponent<BoxCollider>().enabled = false;
-        }
+        isDamageAvailable = false;
+        yield return new WaitForSeconds(coolDownDuration); // starts a countdown for cooldown
+        isDamageAvailable = true;
     }
-    */
 }

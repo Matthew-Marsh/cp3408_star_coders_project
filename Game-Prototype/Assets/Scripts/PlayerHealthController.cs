@@ -7,7 +7,7 @@ public class PlayerHealthController : MonoBehaviour
 {
     public float health;
     public float maxHealth;
-    //public Image healthBar; 
+    public Image healthBar; 
     // Start is called before the first frame update
     void Start()
     {
@@ -17,11 +17,15 @@ public class PlayerHealthController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);
+        // Fills the players health bar based on how much health is remaining
+        healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);
     }
 
-    public void TakeDamage(float damage)
+    void Death()
     {
-        health -= damage;
+        if (health <= 0)
+        {
+            // end game code
+        }
     }
 }
