@@ -4,13 +4,14 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    [SerializeField]
+    public Animator enemyAnimator;
 
     BehaviourTree tree;
     public GameObject player;
     public bool onCoolDown = false;
     private bool waitingForCoolDown = false;
-    private bool playerInRange = false;
-    private bool playerIsSeen = false;
+    public bool playerInRange = false;
     private SphereCollider rangeCollider;
     private PlayerHealthController playerHealth;
 
@@ -35,7 +36,8 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        //Time.timeScale = 5;
+        // Animator
+        enemyAnimator = gameObject.GetComponent<Animator>();
 
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
@@ -61,6 +63,9 @@ public class EnemyAI : MonoBehaviour
         // Behaviour Tree to Control Behaviours
         tree = new BehaviourTree();
 
+        Sequence enemyBehaviour = new Sequence("Enemy Behaviour");
+        Leaf isEnemyAlive = new Leaf("Is the Enemy Alive?", isEnemyLiving);
+
         Selector enemyAction = new Selector("Enemy Action");
 
         Sequence patrol = new Sequence("Patrol Home Point");
@@ -69,7 +74,7 @@ public class EnemyAI : MonoBehaviour
         Leaf moveToWayPoint = new Leaf("Roam around Home", moveToPoint);
 
         Sequence combat = new Sequence("Attack Player");
-        Leaf playerInSight = new Leaf("Player Seen", playerSeen);
+        Leaf ableToAttackPlayer = new Leaf("Player Seen", playerCanBeAttacked);
 
         // Selects between fighting and moving.
         Selector fightPlayer = new Selector("Player in Range");
@@ -89,7 +94,7 @@ public class EnemyAI : MonoBehaviour
         fightPlayer.AddChild(attack);
         fightPlayer.AddChild(moveToPlayer);
 
-        combat.AddChild(playerInSight);
+        combat.AddChild(ableToAttackPlayer);
         combat.AddChild(fightPlayer);
 
         // Patrol Related Leaves.
@@ -101,19 +106,34 @@ public class EnemyAI : MonoBehaviour
         enemyAction.AddChild(combat);
         enemyAction.AddChild(patrol);
 
-        tree.AddChild(enemyAction);
+        enemyBehaviour.AddChild(isEnemyAlive);
+        enemyBehaviour.AddChild(enemyAction);
+
+        tree.AddChild(enemyBehaviour);
 
 
         tree.PrintTree();
     }
 
-    public Node.Status playerSeen()
+    public Node.Status isEnemyLiving()
+    {
+        if (currentHealth <= 0 )
+        {
+            agent.SetDestination(this.transform.position);
+            enemyAnimator.SetTrigger("isDead");
+            Destroy(this.gameObject, 0.90f);
+            return Node.Status.FAILURE;
+        }
+        return Node.Status.SUCCESS;
+    }
+
+    public Node.Status playerCanBeAttacked()
     {
         if (playerInRange)
         {
             return Node.Status.SUCCESS;
         }
-        else if (playerIsSeen)
+        else if (canSeePlayer())
         {
             return Node.Status.SUCCESS;
         }
@@ -127,29 +147,30 @@ public class EnemyAI : MonoBehaviour
 
         if (playerHealth.health == 0) return Node.Status.FAILURE;
 
-        if (playerInRange && playerIsSeen)
+        
+        if (onCoolDown)
         {
-            this.transform.LookAt(player.transform.position);
-            if (onCoolDown)
+            if (!waitingForCoolDown)
             {
-                if (!waitingForCoolDown)
+                enemyAnimator.SetTrigger("isAttacking");
+                int randomNumber = Random.Range(1, 3);
+                enemyAnimator.SetInteger("pickAttack", randomNumber);
+
+                if (player != null && playerHealth.health > 0)
                 {
-                    if (player != null && playerHealth.health > 0)
+                    playerHealth.health -= attackDamage;
+                    if (playerHealth.health < 0)
                     {
-                        playerHealth.health -= attackDamage;
-                        if (playerHealth.health < 0)
-                        {
-                            playerHealth.health = 0;
-                        }
+                        playerHealth.health = 0;
                     }
-                    Invoke("coolDown", attackTimer);
-                    waitingForCoolDown = true;
                 }
+                Invoke("coolDown", attackTimer);
+                waitingForCoolDown = true;
             }
-            onCoolDown = true;
-            return Node.Status.SUCCESS;
         }
-        return Node.Status.FAILURE;
+        onCoolDown = true;
+        //enemyAnimator.SetTrigger("isIdle");
+        return Node.Status.SUCCESS;
     }
 
     public Node.Status canMove()
@@ -208,44 +229,42 @@ public class EnemyAI : MonoBehaviour
         if (state == ActionState.IDLE)
         {
             agent.SetDestination(destination);
+            enemyAnimator.SetBool("isWalking", true);
             state = ActionState.WORKING;
         }
         else if (Vector3.Distance(agent.pathEndPosition, destination) >= 2)
         {
             state = ActionState.IDLE;
+            enemyAnimator.SetBool("isWalking", false);
             return Node.Status.FAILURE;
         }
-        else if ( distanceToTarget < 3 || playerIsSeen)
+        else if ( distanceToTarget < 3 || canSeePlayer() || currentHealth <= 0)
         {
             state = ActionState.IDLE;
+            enemyAnimator.SetBool("isWalking", false);
             return Node.Status.SUCCESS;
         }
         return Node.Status.RUNNING;
     }
 
-    void canSeePlayer()
+    bool canSeePlayer()
     {
-        if (!playerIsSeen) { 
-            RaycastHit raycastInfo;
-            Vector3 rayToTarget = player.transform.position - this.transform.position;
+        RaycastHit raycastInfo;
+        Vector3 rayToTarget = player.transform.position - this.transform.position;
 
-            // Check if Player is in sight of enemy instead.
-            float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
-            if (lookAngle < 65 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
+        //Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        //Debug.DrawRay(transform.position, forward, Color.green, 5);
+
+        // Check if Player is in sight of enemy instead.
+        float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
+        if (lookAngle < 65 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
+        {
+            if (raycastInfo.transform.gameObject.tag == "Player")
             {
-                if (raycastInfo.transform.gameObject.tag == "Player")
-                {
-                    playerIsSeen = true;
-                    Invoke("resetPlayerSeen", 2);
-                    return;
-                }
+                return true;
             }
         }
-    }
-
-    void resetPlayerSeen()
-    {
-        playerIsSeen = false;
+        return false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -267,10 +286,9 @@ public class EnemyAI : MonoBehaviour
 
     public void takeDamage(int damage)
     {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            GameObject.Destroy(this.gameObject);
+        if (currentHealth > 0) {
+            currentHealth -= damage;
+            enemyAnimator.SetTrigger("isHurt");
         }
     }
     
@@ -285,7 +303,6 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        canSeePlayer();
         treeStatus = tree.Process();
     }
 
