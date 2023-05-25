@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     bool isSprinting;
     GameObject weapon;
     public bool isWeaponAvailable = true;
-    public float coolDownDuration = 0.5f;
+    public float coolDownDuration = 2.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -108,16 +108,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Disables the box collider on the players weapon
     void DisableWeaponBoxCollider()
     {
         weapon.GetComponent<BoxCollider>().enabled = false;
     }
-
+    // Enables the box collider on the players weapon
     void EnableWeaponBoxCollider()
     {
         weapon.GetComponent<BoxCollider>().enabled = true;
     }
 
+    // Starts attack animation, enables the weapons box collider then disables it again, puts attacking
+    // on a cooldown
     void AttackControl()
     {
         if (isWeaponAvailable == false)
@@ -129,7 +132,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.Play("MeeleeAttack_TwoHanded");
             Invoke("EnableWeaponBoxCollider", 1);
-            Invoke("DisableWeaponBoxCollider", 2);
+            Invoke("DisableWeaponBoxCollider", 2); // Disables cooldown to prevent players walking into enemys to cause damage
             StartCoroutine(StartCooldown());
         }
 
@@ -148,6 +151,7 @@ public class PlayerController : MonoBehaviour
         MovementControl();
         AttackControl();
 
+        // this code controls the player character following the mouse position
         Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         float rayLength;
