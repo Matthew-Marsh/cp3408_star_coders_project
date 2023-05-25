@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
+    public float walkSpeed = 5f;
+    public float sprintSpeed = 10f;
+    float speed;
     private Rigidbody rb;
     private Camera mainCamera;
     Animator anim;
     bool isSprinting;
+    GameObject weapon;
+    public bool isWeaponAvailable = true;
+    public float coolDownDuration = 0.5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        weapon = GameObject.FindGameObjectWithTag("Weapon");
+        weapon.GetComponent<BoxCollider>().enabled = false;
         rb = GetComponent<Rigidbody>();
         mainCamera = FindObjectOfType<Camera>();
         anim = this.GetComponent<Animator>();
@@ -23,12 +29,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey("left shift"))
         {
-            speed = 10f;
+            speed = sprintSpeed;
             isSprinting = true;
         }
         else
         {
-            speed = 5f;
+            speed = walkSpeed;
             isSprinting = false;
         }
 
@@ -102,16 +108,45 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void DisableWeaponBoxCollider()
     {
-        MovementControl();
+        weapon.GetComponent<BoxCollider>().enabled = false;
+    }
+
+    void EnableWeaponBoxCollider()
+    {
+        weapon.GetComponent<BoxCollider>().enabled = true;
+    }
+
+    void AttackControl()
+    {
+        if (isWeaponAvailable == false)
+        {
+            return;
+        }
 
         if (Input.GetMouseButton(0))
         {
             anim.Play("MeeleeAttack_TwoHanded");
-
+            Invoke("EnableWeaponBoxCollider", 1);
+            Invoke("DisableWeaponBoxCollider", 2);
+            StartCoroutine(StartCooldown());
         }
+
+    }
+
+    public IEnumerator StartCooldown()
+    {
+        isWeaponAvailable = false;
+        yield return new WaitForSeconds(coolDownDuration);
+        isWeaponAvailable = true;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        MovementControl();
+        AttackControl();
 
         Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
