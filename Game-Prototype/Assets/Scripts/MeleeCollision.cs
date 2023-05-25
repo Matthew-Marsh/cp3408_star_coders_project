@@ -20,7 +20,7 @@ public class MeleeCollision : MonoBehaviour
         {
             Debug.Log("Enter");
             GameObject enemy = collision.gameObject;
-            enemy.GetComponent<EnemyAI>().TakeDamage(damage);
+            //enemy.GetComponent<EnemyAI>().TakeDamage(damage);
             StartCoroutine(StartCooldown());
         }
     }

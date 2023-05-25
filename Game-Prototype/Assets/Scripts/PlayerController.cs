@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     GameObject weapon;
     public bool isWeaponAvailable = true;
     public float coolDownDuration = 2.0f;
+    PlayerHealthController health;
+    bool isAlive = true;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mainCamera = FindObjectOfType<Camera>();
         anim = this.GetComponent<Animator>();
+        health = this.GetComponent<PlayerHealthController>();
     }
 
     void MovementControl()
@@ -148,20 +151,29 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MovementControl();
-        AttackControl();
-
-        // this code controls the player character following the mouse position
-        Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        float rayLength;
-
-        if(groundPlane.Raycast(cameraRay, out rayLength))
+        if(isAlive == true)
         {
-            Vector3 pointToLook = cameraRay.GetPoint(rayLength);
-            Debug.DrawLine(cameraRay.origin, pointToLook, Color.blue);
+            MovementControl();
+            AttackControl();
 
-            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+            // this code controls the player character following the mouse position
+            Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            float rayLength;
+
+            if(groundPlane.Raycast(cameraRay, out rayLength))
+            {
+                Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+                Debug.DrawLine(cameraRay.origin, pointToLook, Color.blue);
+
+                transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+            }
+        }
+
+        if (health.health <= 0)
+        {
+            anim.SetTrigger("isDead");
+            isAlive = false;
         }
     }
 }

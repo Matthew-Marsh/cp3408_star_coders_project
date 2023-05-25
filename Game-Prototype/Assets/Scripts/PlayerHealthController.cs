@@ -23,7 +23,7 @@ public class PlayerHealthController : MonoBehaviour
 
     void Death()
     {
-        if (health == 0)
+        if (health <= 0)
         {
             // end game code
         }
