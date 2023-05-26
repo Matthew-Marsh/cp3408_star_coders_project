@@ -209,10 +209,13 @@ public class InventorySystem : MonoBehaviour
         if (equipHand != null)
         {
             WeaponItem equippedWeapon = equipHand.GetComponentInChildren<WeaponItem>();
-            Debug.Log("Equipped Weapon is: " + equippedWeapon.ToString());
-            return equippedWeapon;
-        }
+            if (equippedWeapon != null)
+            {
+                Debug.Log("Equipped Weapon is: " + equippedWeapon.ToString());
+                return equippedWeapon;
+            }
 
+        }
         return null;
     }
 }
