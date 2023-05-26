@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    private GameManager gameManager;
-    private int levelNumber = 1;
+    public int levelNumber = 1;
     public int spawnTimer = 30;
     public int numberEnemiesToSpawn = 4;
     public int detectionRange = 10;
@@ -16,14 +15,12 @@ public class Spawner : MonoBehaviour
     public bool playerInRange = false;
     private SphereCollider detectionCollider;
     private bool spawnCooldown = false;
+    GameManager gameManager;
 
     private void Awake()
     {
-        // Get level number from game manager
-        //gameManager = GameManager.instance;
         gameManager = FindObjectOfType<GameManager>();
         levelNumber = gameManager.GetLevelNumber();
-        //Debug.Log("Level Number: " + levelNumber);
     }
 
     void Start()
@@ -39,7 +36,7 @@ public class Spawner : MonoBehaviour
     void Update()
     {
 
-        numberExistingEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        numberExistingEnemies = GameObject.FindGameObjectsWithTag("enemy").Length;
 
         if (playerInRange && !spawnCooldown && numberExistingEnemies < 20)
         {

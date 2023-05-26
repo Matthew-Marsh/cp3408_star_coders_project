@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -34,22 +35,10 @@ public class EnemyAI : MonoBehaviour
 
     Node.Status treeStatus = Node.Status.RUNNING;
 
-    void Start()
+    void Awake()
     {
         // Animator
         enemyAnimator = gameObject.GetComponent<Animator>();
-
-        // Get player health controller
-        Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
-
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-
-        if (playerObject != null)
-        {
-            player = playerObject;
-            playerHealth = player.GetComponent<PlayerHealthController>();
-            Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
-        }
 
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
@@ -72,32 +61,33 @@ public class EnemyAI : MonoBehaviour
         rangeCollider.radius = attackRange;
         rangeCollider.isTrigger = true;
 
+
         // Behaviour Tree to Control Behaviours
         tree = new BehaviourTree();
 
         Sequence enemyBehaviour = new Sequence("Enemy Behaviour");
-        Leaf isEnemyAlive = new Leaf("Is the Enemy Alive?", isEnemyLiving);
+        Leaf isEnemyAlive = new Leaf("Is the Enemy Alive?", IsEnemyLiving);
 
         Selector enemyAction = new Selector("Enemy Action");
 
         Sequence patrol = new Sequence("Patrol Home Point");
-        Leaf isPlayerInRange = new Leaf("Is Player in Range", isInRange);
-        Leaf findWayPoint = new Leaf("Find Patrol Point", findPoint);
-        Leaf moveToWayPoint = new Leaf("Roam around Home", moveToPoint);
+        Leaf isPlayerInRange = new Leaf("Is Player in Range", IsInRange);
+        Leaf findWayPoint = new Leaf("Find Patrol Point", FindPoint);
+        Leaf moveToWayPoint = new Leaf("Roam around Home", MoveToPoint);
 
         Sequence combat = new Sequence("Attack Player");
-        Leaf ableToAttackPlayer = new Leaf("Player Seen", playerCanBeAttacked);
+        Leaf ableToAttackPlayer = new Leaf("Player Seen", PlayerCanBeAttacked);
 
         // Selects between fighting and moving.
         Selector fightPlayer = new Selector("Player in Range");
 
         // Enemy decides if they are in range or need to move.
         Sequence moveToPlayer = new Sequence("Move to Player");
-        Leaf ableToMove = new Leaf("Can move into Range", canMove);
-        Leaf move = new Leaf("Moving to Player", enemyMove);
+        Leaf ableToMove = new Leaf("Can move into Range", CanMove);
+        Leaf move = new Leaf("Moving to Player", EnemyMove);
 
         // Enemy attacks if in range and insight of player.
-        Leaf attack = new Leaf("Attack Player", attackPlayer);
+        Leaf attack = new Leaf("Attack Player", AttackPlayer);
 
         // Combat Related Leaves.
         moveToPlayer.AddChild(ableToMove);
@@ -127,7 +117,7 @@ public class EnemyAI : MonoBehaviour
         tree.PrintTree();
     }
 
-    public Node.Status isEnemyLiving()
+    public Node.Status IsEnemyLiving()
     {
         if (currentHealth <= 0)
         {
@@ -139,13 +129,13 @@ public class EnemyAI : MonoBehaviour
         return Node.Status.SUCCESS;
     }
 
-    public Node.Status playerCanBeAttacked()
+    public Node.Status PlayerCanBeAttacked()
     {
         if (playerInRange)
         {
             return Node.Status.SUCCESS;
         }
-        else if (canSeePlayer())
+        else if (CanSeePlayer())
         {
             return Node.Status.SUCCESS;
         }
@@ -153,7 +143,7 @@ public class EnemyAI : MonoBehaviour
         return Node.Status.FAILURE;
     }
 
-    public Node.Status attackPlayer()
+    public Node.Status AttackPlayer()
     {
         if (!playerInRange) return Node.Status.FAILURE;
 
@@ -176,7 +166,7 @@ public class EnemyAI : MonoBehaviour
                         playerHealth.health = 0;
                     }
                 }
-                Invoke("coolDown", attackTimer);
+                Invoke("CoolDown", attackTimer);
                 waitingForCoolDown = true;
             }
         }
@@ -185,7 +175,7 @@ public class EnemyAI : MonoBehaviour
         return Node.Status.SUCCESS;
     }
 
-    public Node.Status canMove()
+    public Node.Status CanMove()
     {
         NavMeshPath navMeshPath = new NavMeshPath();
         Vector3 playerPosition = player.transform.position;
@@ -200,19 +190,19 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public Node.Status enemyMove()
+    public Node.Status EnemyMove()
     {
         Node.Status s = GoToLocation(new Vector3(player.transform.position.x, 0, player.transform.position.z));
         return s;
     }
 
-    public Node.Status isInRange()
+    public Node.Status IsInRange()
     {
         if (playerInRange) return Node.Status.FAILURE;
         return Node.Status.SUCCESS;
     }
 
-    public Node.Status findPoint()
+    public Node.Status FindPoint()
     {
         roamGoal = Vector3.zero;
 
@@ -229,7 +219,7 @@ public class EnemyAI : MonoBehaviour
         return Node.Status.FAILURE;
     }
 
-    public Node.Status moveToPoint()
+    public Node.Status MoveToPoint()
     {
         Node.Status s = GoToLocation(roamGoal);
         return s;
@@ -250,7 +240,7 @@ public class EnemyAI : MonoBehaviour
             enemyAnimator.SetBool("isWalking", false);
             return Node.Status.FAILURE;
         }
-        else if (distanceToTarget < 3 || canSeePlayer() || currentHealth <= 0)
+        else if (distanceToTarget < 3 || CanSeePlayer() || currentHealth <= 0)
         {
             state = ActionState.IDLE;
             enemyAnimator.SetBool("isWalking", false);
@@ -259,13 +249,10 @@ public class EnemyAI : MonoBehaviour
         return Node.Status.RUNNING;
     }
 
-    bool canSeePlayer()
+    bool CanSeePlayer()
     {
         RaycastHit raycastInfo;
         Vector3 rayToTarget = player.transform.position - this.transform.position;
-
-        //Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-        //Debug.DrawRay(transform.position, forward, Color.green, 5);
 
         // Check if Player is in sight of enemy instead.
         float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
@@ -296,7 +283,7 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-    public void takeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         if (currentHealth > 0)
         {
@@ -305,7 +292,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void coolDown()
+    void CoolDown()
     {
         if (onCoolDown)
         {

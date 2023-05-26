@@ -11,11 +11,13 @@ public class ConsumableItem : InventoryItem
     public override void Use()
     {
         base.Use();
-        
 
-        Debug.Log("Using Consumable Item.");
-        // Perform health restore
+        Debug.Log("Using Consumable Item: " + healthRestoreAmount);
+        //PlayerHealthController playerHealthController = GetComponent<PlayerHealthController>();
+        PlayerHealthController playerHealthController = FindObjectOfType<PlayerHealthController>();
+        Debug.Log("Player Health Controller: " + playerHealthController.ToString());
+        playerHealthController.AddHealth(healthRestoreAmount);
 
-        RemoveFromInventory();
+        RemoveFromInventory();  // It will be destroyed by calling this
     }
 }

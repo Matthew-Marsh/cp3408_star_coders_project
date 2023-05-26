@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class MeleeCollision : MonoBehaviour
 {
-    public int damage;
+    private int damage;
     bool isDamageAvailable = true;
     public float coolDownDuration = 2.0f;
+
+    private void Update()
+    {
+        
+    }
 
     private void OnTriggerEnter(Collider collision)
     {

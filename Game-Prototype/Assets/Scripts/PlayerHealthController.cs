@@ -37,4 +37,16 @@ public class PlayerHealthController : MonoBehaviour
             // end game code
         }
     }
+
+    public void AddHealth(int healthAmountToAdd)
+    {
+        if(healthAmountToAdd + health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        else
+        {
+            health += healthAmountToAdd;
+        }
+    }
 }

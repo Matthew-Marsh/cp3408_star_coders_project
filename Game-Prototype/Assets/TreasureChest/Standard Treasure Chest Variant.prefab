@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 417174686, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 725525958, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1000010498622980, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_Name
       value: Standard Treasure Chest Variant
@@ -17,23 +25,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.39012003
+      value: 0.39012006
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.39012003
+      value: 0.39012006
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.18266153
+      value: -1.1030478
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.0048444
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.61107713
+      value: 0.5675149
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalRotation.w
@@ -61,6 +69,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65000010191139166, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65000013765776956, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509452881813948002, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1509452881813948003, guid: fac60f777116d6c42905b09352422e54, type: 3}
