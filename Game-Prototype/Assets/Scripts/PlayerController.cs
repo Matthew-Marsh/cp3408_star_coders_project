@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour
                 isSprinting = false;
             }
 
-            if (CanMove(movement))  // Stops going through objects/walls
-            {
+            //if (CanMove(movement))  // Stops going through objects/walls
+            //{
                 movement.y = 0f;
                 movement.Normalize();
                 Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetTrigger("isIdle");
             }
-        }
+        //}
     }
 
     // Disables the box collider on the players weapon

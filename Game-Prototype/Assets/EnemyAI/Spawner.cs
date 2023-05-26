@@ -84,7 +84,7 @@ public class Spawner : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerTrigger"))
+        if (other.gameObject.CompareTag("Player"))
         {
             playerInRange = true;
         }
@@ -92,7 +92,7 @@ public class Spawner : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerTrigger"))
+        if (other.gameObject.CompareTag("Player"))
         {
             playerInRange = false;
         }

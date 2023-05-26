@@ -40,17 +40,15 @@ public class EnemyAI : MonoBehaviour
         enemyAnimator = gameObject.GetComponent<Animator>();
 
         // Get player health controller
-        if (player == null)
-        {
-            Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
+        Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
 
-            GameObject playerObject = GameObject.FindGameObjectWithTag("PlayerTrigger");
-            if (playerObject != null)
-            {
-                player = playerObject;
-                playerHealth = player.GetComponent<PlayerHealthController>();
-                Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
-            }
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            player = playerObject;
+            playerHealth = player.GetComponent<PlayerHealthController>();
+            Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
         }
 
         // Sets homepoint so enemy knows where to return to.
@@ -61,7 +59,7 @@ public class EnemyAI : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         if (player == null)
         {
-            player = GameObject.FindGameObjectWithTag("PlayerTrigger");
+            player = GameObject.FindGameObjectWithTag("Player");
         }
         playerHealth = player.gameObject.GetComponent<PlayerHealthController>();
 
@@ -158,8 +156,6 @@ public class EnemyAI : MonoBehaviour
     public Node.Status attackPlayer()
     {
         if (!playerInRange) return Node.Status.FAILURE;
-
-
 
         if (playerHealth.health == 0) return Node.Status.FAILURE;
 
@@ -275,7 +271,7 @@ public class EnemyAI : MonoBehaviour
         float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
         if (lookAngle < 65 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
         {
-            if (raycastInfo.transform.gameObject.tag == "PlayerTrigger")
+            if (raycastInfo.transform.gameObject.tag == "Player")
             {
                 return true;
             }
@@ -285,7 +281,7 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerTrigger"))
+        if (other.gameObject.CompareTag("Player"))
         {
             playerInRange = true;
         }
@@ -293,7 +289,7 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerTrigger"))
+        if (other.gameObject.CompareTag("Player"))
         {
             playerInRange = false;
         }
