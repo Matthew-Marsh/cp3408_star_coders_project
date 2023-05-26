@@ -1,80 +1,163 @@
-using static UnityEditor.Progress;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-[System.Serializable]
-public class InventorySystem
+//[System.Serializable]
+
+public class InventorySystem : MonoBehaviour
 {
-    //public class InventoryEntry
-    //{
-    //    public int Count;
-    //    public Item Item;
-    //}
+    //[SerializeField]
+    public List<GameObject> inventory;
 
-    //public InventoryEntry[] Entries = new InventoryEntry[3];
-    //CharacterData m_Owner;
+    // Display and navigate inventory items
+    private int currentIndex = 0;
+    public TMP_Text inventoryText;
+    public Image currentItemIcon;
 
-    //public void Init(CharacterData owner)
-    //{
-    //    m_Owner = owner;
-    //}
+    private void Awake()
+    {
+        inventory = new List<GameObject>();
+    }
 
-    //// Add an item to the inventory. If this item already exists, increment the counter.
-    //public void AddItem(Item item)
-    //{
-    //    bool found = false;
-    //    int firstEmpty = -1;
-    //    for (int i = 0; i < 10; ++i)
-    //    {
-    //        if (Entries[i] == null)
-    //        {
-    //            if (firstEmpty == -1)
-    //                firstEmpty = i;
-    //        }
-    //        else if (Entries[i].Item == item)
-    //        {
-    //            Entries[i].Count += 1;
-    //            found = true;
-    //        }
-    //    }
+    public void AddToInventory(GameObject inventoryItem)
+    {
+        Debug.Log(inventoryItem.ToString() + "Just before add.");
+        if (inventoryItem != null)
+        {
+            inventory.Add(inventoryItem);
+            Debug.Log(inventoryItem + "Loot item added to inventory.");
+            //lootItem.gameObject.SetActive(false); // Disable in scene
+            UpdateInventoryText();
+            UpdateItemIcon();
+        }
+    }
 
-    //    if (!found && firstEmpty != -1)
-    //    {
-    //        InventoryEntry entry = new InventoryEntry();
-    //        entry.Item = item;
-    //        entry.Count = 1;
+    // Call on inventory item subclasses to use item selected
+    public void UseItem()
+    {
+        if (currentIndex >= 0 && currentIndex < inventory.Count)
+        {
+            GameObject itemToUse = inventory[currentIndex];
+            InventoryItem itemComponent = itemToUse.GetComponent<InventoryItem>();
+            if (itemComponent != null)
+            {
+                itemComponent.Use();
+                Debug.Log("Loot item being used.");
+                UpdateInventoryText();
+                UpdateItemIcon();
+            }
+        }
+    }
 
-    //        Entries[firstEmpty] = entry;
-    //    }
-    //}
+    // Change inventory item
+    public void ChangeItem(bool next)
+    {
+        Debug.Log("Current Index Starts at: " + currentIndex);
+        if (inventory.Count > 0)  // Inventory is empty skip change
+        {
+            if (next)
+            {
+                currentIndex++;
+                if (currentIndex >= inventory.Count)
+                    currentIndex = 0;
+            }
+            else
+            {
+                currentIndex--;
+                if (currentIndex < 0)
+                    currentIndex = inventory.Count - 1;
+            }
+            Debug.Log("Current Index Changed to: " + currentIndex);
+           
+        }
+        UpdateInventoryText();
+        UpdateItemIcon();
+    }
 
-    //// <summary>
-    //// This will *try* to use the item. If the item return true when used, this will decrement the stack count and
-    //// if the stack count reach 0 this will free the slot. If it return false, it will just ignore that call.
-    //// (e.g. a potion will return false if the user is at full health, not consuming the potion in that case)
-    //// </summary>
-    //// <param name="item"></param>
-    //// <returns></returns>
-    //public bool UseItem(InventoryEntry item)
-    //{
-    //    if (item.Item.UsedBy(m_Owner))
-    //    {
-    //        item.Count -= 1;
 
-    //        if (item.Count <= 0)
-    //        {
-    //            //maybe store the index in the InventoryEntry to avoid having to find it again here
-    //            for (int i = 0; i < 3; ++i)
-    //            {
-    //                if (Entries[i] == item)
-    //                {
-    //                    Entries[i] = null;
-    //                    break;
-    //                }
-    //            }
-    //        }
+    // Update display of inventory item in UI
+    private void UpdateInventoryText()
+    {
+        if (inventoryText != null)
+        {
+            if (inventory.Count > 0 && currentIndex < inventory.Count)
+            {
+                string itemName = inventory[currentIndex].GetComponent<InventoryItem>().displayName;
+                inventoryText.text = itemName;
+            }
+            else
+            {
+                inventoryText.text = "Empty";
+            }
+        }
+    }
 
-    //        return true;
-    //    }
+    private void UpdateItemIcon()
+    {
+        if (currentItemIcon != null)
+        {
+            if (inventory.Count > 0 && currentIndex < inventory.Count)
+            {
+                Sprite itemSprite = inventory[currentIndex].GetComponent<InventoryItem>().icon;
+                currentItemIcon.sprite = itemSprite;
+            }
+            else
+            {
+                currentItemIcon.sprite = null;
+            }
+    }
+        }
 
-    //    return false;
-    //}
+    public void RemoveItemFromInventory(InventoryItem itemToRemove)
+    {
+        int indexOfItemToRemove = inventory.IndexOf(itemToRemove.gameObject);
+        if (indexOfItemToRemove >= 0)
+        {
+            inventory.RemoveAt(indexOfItemToRemove);
+            if (currentIndex >= inventory.Count)
+            {
+                currentIndex = Mathf.Max(0, inventory.Count - 1);
+            }
+            Destroy(itemToRemove.gameObject);
+            UpdateInventoryText();
+        }
+
+    }
+
+    public void EquipWeapon(WeaponItem weapon)
+    {
+        UnequipWeapon();
+        inventory.Remove(weapon.gameObject);
+        GameObject equipHand = GameObject.FindGameObjectWithTag("EquipHand");
+        if (equipHand != null)
+        {
+            weapon.transform.SetParent(equipHand.transform, false);  // Set weapon as child of equipHand
+            weapon.gameObject.SetActive(true);
+        }
+        UpdateInventoryText();
+    }
+
+    public void UnequipWeapon()
+    {
+        GameObject equipHand = GameObject.FindGameObjectWithTag("EquipHand");
+        WeaponItem equippedWeapon = equipHand.GetComponentInChildren<WeaponItem>();
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.transform.SetParent(null, false);
+            inventory.Add(equippedWeapon.gameObject);
+            equippedWeapon.gameObject.SetActive(false);
+            Debug.Log(equippedWeapon.ToString() + " unequipped.");
+            UpdateInventoryText();
+        }
+    }
+
+    public InventoryItem GetCurrentItem()
+    {
+        if(currentIndex >= 0 && currentIndex < inventory.Count)
+        {
+            return inventory[currentIndex].GetComponent<InventoryItem>();
+        }
+        return null;
+    }
 }

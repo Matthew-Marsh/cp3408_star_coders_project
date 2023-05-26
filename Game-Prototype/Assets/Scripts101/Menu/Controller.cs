@@ -74,19 +74,19 @@ public class Controller : MonoBehaviour
     //    //}
 
 
-    //    //public void DisplayCursor(bool display)
-    //    //{
-    //    //    m_IsPaused = display;
-    //    //    Cursor.lockState = display ? CursorLockMode.None : CursorLockMode.Locked;
-    //    //    Cursor.visible = display;
-    //    //}
+    //    public void DisplayCursor(bool display)
+    //    {
+    //        m_IsPaused = display;
+    //        Cursor.lockState = display ? CursorLockMode.None : CursorLockMode.Locked;
+    //        Cursor.visible = display;
+    //    }
 
     //    void PickupWeapon(Weapon prefab)
     //    {
     //        // Check if weapon already exists and add if not
     //        if (!m_Weapons.Exists(weapon => weapon.name == prefab.name))
     //        {
-    //            //var w = Instantiate(prefab, WeaponPosition, false);
+    //            var w = Instantiate(prefab, WeaponPosition, false);
     //            w.name = prefab.name;
     //            w.transform.localPosition = Vector3.zero;
     //            w.transform.localRotation = Quaternion.identity;
@@ -102,7 +102,7 @@ public class Controller : MonoBehaviour
     //    {
     //        if (m_CurrentWeapon != -1)
     //        {
-    //            //m_Weapons[m_CurrentWeapon].PutAway();
+    //            m_Weapons[m_CurrentWeapon].PutAway();
     //            m_Weapons[m_CurrentWeapon].gameObject.SetActive(false);
     //        }
 
@@ -114,7 +114,7 @@ public class Controller : MonoBehaviour
     //            m_CurrentWeapon = 0;
 
     //        m_Weapons[m_CurrentWeapon].gameObject.SetActive(true);
-    //        //m_Weapons[m_CurrentWeapon].Selected();
+    //        m_Weapons[m_CurrentWeapon].Selected();
     //    }
 
     //    public void PlayFootstep()

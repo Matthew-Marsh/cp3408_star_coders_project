@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
         if (Input.GetKey("left shift"))
         {
             speed = sprintSpeed;
@@ -40,71 +44,82 @@ public class PlayerController : MonoBehaviour
             speed = walkSpeed;
             isSprinting = false;
         }
+        if (movement.magnitude > 0)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
 
-        if (Input.GetKey("w") && Input.GetKey("a"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunLeft");
-            else
-                anim.SetTrigger("isWalkLeft");
-            transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("w") && Input.GetKey("d"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunRight");
-            else
-                anim.SetTrigger("isWalkRight");
-            transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("s") && Input.GetKey("a"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("s") && Input.GetKey("d"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("d"))
-        {
             if (isSprinting)
                 anim.SetTrigger("isRunFwd");
             else
                 anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.right * speed * Time.deltaTime;
+
+            transform.position += movement * speed * Time.deltaTime;
         }
-        else if (Input.GetKey("a"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
-            else
-                anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.left * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey("w"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
-            else
-                anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.forward * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey("s"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += Vector3.back * speed * Time.deltaTime;
-        }
+        //if (Input.GetKey("w") && Input.GetKey("a"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunLeft");
+        //    else
+        //        anim.SetTrigger("isWalkLeft");
+        //    transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
+        //}
+        //else if (Input.GetKey("w") && Input.GetKey("d"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunRight");
+        //    else
+        //        anim.SetTrigger("isWalkRight");
+        //    transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
+        //}
+        //else if (Input.GetKey("s") && Input.GetKey("a"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunBck");
+        //    else
+        //        anim.SetTrigger("isWalkBck");
+        //    transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
+        //}
+        //else if (Input.GetKey("s") && Input.GetKey("d"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunBck");
+        //    else
+        //        anim.SetTrigger("isWalkBck");
+        //    transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
+        //}
+        //else if (Input.GetKey("d"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunFwd");
+        //    else
+        //        anim.SetTrigger("isWalkFwd");
+        //    transform.position += Vector3.right * speed * Time.deltaTime;
+        //}
+        //else if (Input.GetKey("a"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunFwd");
+        //    else
+        //        anim.SetTrigger("isWalkFwd");
+        //    transform.position += Vector3.left * speed * Time.deltaTime;
+        //}
+        //else if (Input.GetKey("w"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunFwd");
+        //    else
+        //        anim.SetTrigger("isWalkFwd");
+        //    transform.position += Vector3.forward * speed * Time.deltaTime;
+        //}
+        //else if (Input.GetKey("s"))
+        //{
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunBck");
+        //    else
+        //        anim.SetTrigger("isWalkBck");
+        //    transform.position += Vector3.back * speed * Time.deltaTime;
+        //}
         else
         {
             anim.SetTrigger("isIdle");
@@ -166,7 +181,11 @@ public class PlayerController : MonoBehaviour
                 Vector3 pointToLook = cameraRay.GetPoint(rayLength);
                 Debug.DrawLine(cameraRay.origin, pointToLook, Color.blue);
 
-                transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+                Vector3 lookDirection = pointToLook - transform.position;
+                lookDirection.y = 0f;
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 360f * Time.deltaTime);
+                //transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
             }
         }
 

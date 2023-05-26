@@ -9,13 +9,38 @@ public class CameraFollowPlayer : MonoBehaviour
     public Vector3 playerOffset;
     public float MoveSpeed = 400f;
     private Transform cameraTransform; // How much the camera gets offset from the player 
+    GameObject playerObject;
 
+    private void Awake()
+    {
+        // Needs to be done in awake and on start due to character spawn
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            followPlayer = playerObject.transform;
+        }
+        // moves camera based on offset
+        else
+        {
+            cameraTransform = transform;
+        }
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
+        // Needs to be done in awake and on start due to character spawn
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            followPlayer = playerObject.transform;
+        }
         // moves camera based on offset
-        cameraTransform = transform;
+        else
+        {
+            cameraTransform = transform;
+        }
+
     }
 
     public void SetTarget(Transform newTransformTarget)
