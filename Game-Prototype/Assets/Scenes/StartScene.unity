@@ -1757,7 +1757,7 @@ MonoBehaviour:
   playerOffset: {x: 0, y: 2, z: -4}
   MoveSpeed: 100
   moveSpeed: 5
-  snapThreshold: 0.9
+  snapThreshold: 2
 --- !u!1001 &3604638630321799372
 PrefabInstance:
   m_ObjectHideFlags: 0

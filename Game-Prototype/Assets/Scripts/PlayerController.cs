@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     PlayerHealthController health;
     bool isAlive = true;
     public float floorAdjustmentYAxis = 0f;
+    public float turnSpeed = 0.9f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,24 +33,85 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        //float horizontalInput = Input.GetAxis("Horizontal");
+        //float verticalInput = Input.GetAxis("Vertical");
+        //Vector3 movement = new Vector3(-horizontalInput, 0f, verticalInput).normalized;
+        //bool isMoving = Mathf.Abs(horizontalInput) > 0 || Mathf.Abs(verticalInput) > 0;
+        //Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        bool isMoving = false;
+        Vector3 movement = Vector3.zero;
 
-        if (Input.GetKey("left shift"))
+        //float horizontalInput = 0f;
+        //float verticalInput = 0f;
+        //bool isMoving = false;
+        //Vector3 movement = new Vector3(-horizontalInput, 0f, verticalInput).normalized;
+
+        //Vector3 mousePosition = Input.mousePosition;
+        //Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, mainCamera.transform.position.y));
+        //Vector3 movement = (mouseWorldPosition - transform.position).normalized;
+
+        if (Input.GetKey(KeyCode.A))
         {
-            speed = sprintSpeed;
-            isSprinting = true;
+            //horizontalInput = -1f;
+            movement -= mainCamera.transform.right;
+            isMoving = true;
         }
-        else
+        else if (Input.GetKey(KeyCode.D))
         {
-            speed = walkSpeed;
-            isSprinting = false;
+            //horizontalInput = 1f;
+            movement += mainCamera.transform.right;
+            isMoving = true;
         }
-        if (movement.magnitude > 0)
+
+        // Check for vertical movement
+        if (Input.GetKey(KeyCode.W))
         {
+            //verticalInput = 1f;
+            movement += mainCamera.transform.forward;
+            isMoving = true;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            //verticalInput = -1f;
+            movement -= mainCamera.transform.forward;
+            isMoving = true;
+        }
+
+        //Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
+        if (isMoving)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                speed = sprintSpeed;
+                isSprinting = true;
+            }
+            else
+            {
+                speed = walkSpeed;
+                isSprinting = false;
+            }
+
+            //Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+            //Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
+            //float rayLength;
+
+            //if (groundPlane.Raycast(cameraRay, out rayLength))
+            //{
+            //    Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+            //    Vector3 lookDirection = pointToLook - transform.position;
+            //    lookDirection.y = 0f;
+            //    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            //    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            //}
+
+            //Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
+
+            movement.y = 0f;
+            movement.Normalize();
             Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
             if (isSprinting)
                 anim.SetTrigger("isRunFwd");
@@ -57,6 +120,33 @@ public class PlayerController : MonoBehaviour
 
             transform.position += movement * speed * Time.deltaTime;
         }
+        else
+        {
+            anim.SetTrigger("isIdle");
+        }
+
+        //if (Input.GetKey("left shift"))
+        //{
+        //    speed = sprintSpeed;
+        //    isSprinting = true;
+        //}
+        //else
+        //{
+        //    speed = walkSpeed;
+        //    isSprinting = false;
+        //}
+        //if (movement.magnitude > 0)
+        //{
+        //    Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+        //    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
+
+        //    if (isSprinting)
+        //        anim.SetTrigger("isRunFwd");
+        //    else
+        //        anim.SetTrigger("isWalkFwd");
+
+        //    transform.position += movement * speed * Time.deltaTime;
+        //}
         //if (Input.GetKey("w") && Input.GetKey("a"))
         //{
         //    if (isSprinting)
@@ -121,10 +211,10 @@ public class PlayerController : MonoBehaviour
         //        anim.SetTrigger("isWalkBck");
         //    transform.position += Vector3.back * speed * Time.deltaTime;
         //}
-        else
-        {
-            anim.SetTrigger("isIdle");
-        }
+        //else
+        //{
+        //    anim.SetTrigger("isIdle");
+        //}
     }
 
     // Disables the box collider on the players weapon
