@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1385568047327709563
 Transform:
   m_ObjectHideFlags: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c57c979bd70e8418ee6ef88cf51425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: StartLevel
+  sceneToLoad: StartScene
   startMenuAudioClips:
   - {fileID: 8300000, guid: 3aa8f1d7601a19d4c88dcaaa262c2e06, type: 3}
   - {fileID: 8300000, guid: b82b0d87309722341a8926c780d9426d, type: 3}
