@@ -2329,8 +2329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 867f3812359dd014b97ece0177d05466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAnimator: {fileID: 0}
-  player: {fileID: 0}
+  enemyAnimator: {fileID: 95026947950475570}
+  player: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
   onCoolDown: 0
   playerInRange: 0
   currentHealth: 100

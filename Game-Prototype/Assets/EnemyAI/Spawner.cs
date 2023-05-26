@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public int levelNumber = 1;
+    GameManager gameManager;
+    private int levelNumber = 1;
     public int spawnTimer = 30;
     public int numberEnemiesToSpawn = 4;
     public int detectionRange = 10;
@@ -15,6 +16,15 @@ public class Spawner : MonoBehaviour
     public bool playerInRange = false;
     private SphereCollider detectionCollider;
     private bool spawnCooldown = false;
+
+    private void Awake()
+    {
+        // Get level number from game manager
+        gameManager = GetComponent<GameManager>();
+        levelNumber = gameManager.GetLevelNumber();
+        Debug.Log("Level Number: " + levelNumber);
+    }
+
     void Start()
     {
         // Sphere Collider around Spawn
@@ -73,7 +83,7 @@ public class Spawner : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("PlayerTrigger"))
         {
             playerInRange = true;
         }
@@ -81,7 +91,7 @@ public class Spawner : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("PlayerTrigger"))
         {
             playerInRange = false;
         }
