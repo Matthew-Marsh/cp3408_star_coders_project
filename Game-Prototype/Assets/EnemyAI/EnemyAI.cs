@@ -8,6 +8,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     public Animator enemyAnimator;
 
+    EnemyMusicPlayer enemyMusicPlayer;
+
     BehaviourTree tree;
     public GameObject player;
     public bool onCoolDown = false;
@@ -39,6 +41,10 @@ public class EnemyAI : MonoBehaviour
     {
         // Animator
         enemyAnimator = gameObject.GetComponent<Animator>();
+
+        // Audio
+        enemyMusicPlayer = FindObjectOfType<EnemyMusicPlayer>();
+        Debug.Log("Audio Enemy Player: " + enemyMusicPlayer.ToString());
 
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
@@ -154,6 +160,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (!waitingForCoolDown)
             {
+                enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Attacking);
                 enemyAnimator.SetTrigger("isAttacking");
                 int randomNumber = Random.Range(1, 3);
                 enemyAnimator.SetInteger("pickAttack", randomNumber);
@@ -232,18 +239,21 @@ public class EnemyAI : MonoBehaviour
         {
             agent.SetDestination(destination);
             enemyAnimator.SetBool("isWalking", true);
+            enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Idle);
             state = ActionState.WORKING;
         }
         else if (Vector3.Distance(agent.pathEndPosition, destination) >= 2)
         {
             state = ActionState.IDLE;
             enemyAnimator.SetBool("isWalking", false);
+            enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Idle);
             return Node.Status.FAILURE;
         }
         else if (distanceToTarget < 3 || CanSeePlayer() || currentHealth <= 0)
         {
             state = ActionState.IDLE;
             enemyAnimator.SetBool("isWalking", false);
+            enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Idle);
             return Node.Status.SUCCESS;
         }
         return Node.Status.RUNNING;
@@ -260,6 +270,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (raycastInfo.transform.gameObject.tag == "Player")
             {
+                enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Alert);
                 return true;
             }
         }
