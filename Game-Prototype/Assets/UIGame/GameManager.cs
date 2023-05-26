@@ -47,8 +47,7 @@ public class GameManager : MonoBehaviour
         {
             PlayAudioClip(GetRandomAudioClip(startMenuAudioClips), true);
         }
-        // TODO: Remove this after testing
-        //gameManagerAudioSource = this.GetComponent<AudioSource>();
+
         if (currentScene.name == "StartScene")
         {
             gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
@@ -66,31 +65,6 @@ public class GameManager : MonoBehaviour
             pauseMenuUI.gameObject.SetActive(false);
             deathMenuUI.gameObject.SetActive(false);
         }
-    }
-
-    private void Start()
-    {
-        //Scene currentScene = SceneManager.GetActiveScene();
-        //string sceneName = currentScene.name;
-        //// TODO: Remove this after testing
-        ////gameManagerAudioSource = this.GetComponent<AudioSource>();
-        //if (currentScene.name == "Demo_Scene")
-        //{
-        //    gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
-        //    Debug.Log(gamePlayUI.ToString());
-        //    endLevelUI = GameObject.Find("UIEndLevelMenu").GetComponent<Canvas>();
-        //    Debug.Log(endLevelUI.ToString());
-        //    pauseMenuUI = GameObject.Find("UIPauseMenu").GetComponent<Canvas>();
-        //    Debug.Log(pauseMenuUI.ToString());
-        //    deathMenuUI = GameObject.Find("UIDeathMenu").GetComponent<Canvas>();
-        //    Debug.Log(deathMenuUI.ToString());
-
-        //    // Activate only the game play UI
-        //    gamePlayUI.gameObject.SetActive(true);
-        //    endLevelUI.gameObject.SetActive(false);
-        //    pauseMenuUI.gameObject.SetActive(false);
-        //    deathMenuUI.gameObject.SetActive(false);
-        //}
     }
 
     // On start menu if Play is selected continue saved from save

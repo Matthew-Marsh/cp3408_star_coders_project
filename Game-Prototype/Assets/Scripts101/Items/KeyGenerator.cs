@@ -2,14 +2,27 @@ using UnityEngine;
 
 public class KeyGenerator : MonoBehaviour
 {
-    public GameObject keyObject;
-    public float dropChance = 0.5f;
+    public GameObject dropObject;
+    public float dropChance = 0.1f;
+    public float dropDelay = 20.0f;
+    private bool hasDropped = false;
 
-    private void OnDestroy()
+    private void Start()
     {
-        if(keyObject != null && Random.value < dropChance)
+        InvokeRepeating("CheckDrop", dropDelay, dropDelay);
+    }
+
+    public void CheckDrop()
+    {
+        if (!hasDropped && Random.value < dropChance)
         {
-            Instantiate(keyObject, transform.position, Quaternion.identity);
+            DropObject();
+            hasDropped = true;
         }
+    }
+
+    private void DropObject()
+    {
+        Instantiate(dropObject, transform.position, Quaternion.identity);
     }
 }

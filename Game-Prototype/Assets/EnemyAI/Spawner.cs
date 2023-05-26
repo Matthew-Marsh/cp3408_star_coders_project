@@ -36,7 +36,7 @@ public class Spawner : MonoBehaviour
     void Update()
     {
 
-        numberExistingEnemies = GameObject.FindGameObjectsWithTag("enemy").Length;
+        numberExistingEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
         if (playerInRange && !spawnCooldown && numberExistingEnemies < 20)
         {
