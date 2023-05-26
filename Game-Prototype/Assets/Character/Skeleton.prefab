@@ -2269,6 +2269,7 @@ GameObject:
   - component: {fileID: 774330855}
   - component: {fileID: -5034250128209308833}
   - component: {fileID: -8813590734915447854}
+  - component: {fileID: 8151645435431585097}
   m_Layer: 2
   m_Name: Skeleton
   m_TagString: Untagged
@@ -2495,6 +2496,20 @@ MonoBehaviour:
   AlertClips:
   - {fileID: 8300000, guid: f607f649de9166e46b76be5de6cf16b7, type: 3}
   - {fileID: 8300000, guid: ea74277b6fa7e614686a38879ef974dd, type: 3}
+--- !u!114 &8151645435431585097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809680881062764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e6ccccf75c1a4419555ccb36d0e7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyObject: {fileID: 374289202576707483, guid: 78df1db2fbc8ec64f949fac0c05bf693, type: 3}
+  dropChance: 0.3
 --- !u!1 &1813734462565108
 GameObject:
   m_ObjectHideFlags: 0

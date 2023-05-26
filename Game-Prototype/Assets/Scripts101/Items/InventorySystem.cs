@@ -14,10 +14,26 @@ public class InventorySystem : MonoBehaviour
     private int currentIndex = 0;
     public TMP_Text inventoryText;
     public Image currentItemIcon;
+    public TMP_Text currentDamageRangeText;
+    public Image currentEquipItemIcon;
+    public TMP_Text numberOfKeysText;
+    public TMP_Text levelNumberText;
+
+    // Get game manager to update UI values
+    private GameManager gameManager;
+
 
     private void Awake()
     {
         inventory = new List<GameObject>();
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Start()
+    {
+        UpdateEquippedWeaponUI();
+        levelNumberText.text = gameManager.GetLevelNumber().ToString();
+        numberOfKeysText.text = gameManager.GetNumberOfKeys().ToString();
     }
 
     public void AddToInventory(GameObject inventoryItem)
@@ -30,6 +46,7 @@ public class InventorySystem : MonoBehaviour
             //lootItem.gameObject.SetActive(false); // Disable in scene
             UpdateInventoryText();
             UpdateItemIcon();
+            UpdateEquippedWeaponUI();
         }
     }
 
@@ -46,6 +63,7 @@ public class InventorySystem : MonoBehaviour
                 Debug.Log("Loot item being used.");
                 UpdateInventoryText();
                 UpdateItemIcon();
+                UpdateEquippedWeaponUI();
             }
         }
     }
@@ -69,10 +87,11 @@ public class InventorySystem : MonoBehaviour
                     currentIndex = inventory.Count - 1;
             }
             Debug.Log("Current Index Changed to: " + currentIndex);
-           
+
         }
         UpdateInventoryText();
         UpdateItemIcon();
+        UpdateEquippedWeaponUI();
     }
 
 
@@ -106,8 +125,8 @@ public class InventorySystem : MonoBehaviour
             {
                 currentItemIcon.sprite = null;
             }
-    }
         }
+    }
 
     public void RemoveItemFromInventory(InventoryItem itemToRemove)
     {
@@ -123,7 +142,6 @@ public class InventorySystem : MonoBehaviour
             UpdateInventoryText();
             UpdateItemIcon();
         }
-
     }
 
     public void EquipWeapon(WeaponItem weapon)
@@ -140,6 +158,7 @@ public class InventorySystem : MonoBehaviour
         }
         UpdateInventoryText();
         UpdateItemIcon();
+        UpdateEquippedWeaponUI();
     }
 
     public void UnequipWeapon()
@@ -154,15 +173,46 @@ public class InventorySystem : MonoBehaviour
             Debug.Log(equippedWeapon.ToString() + " unequipped.");
             UpdateInventoryText();
             UpdateItemIcon();
+            UpdateEquippedWeaponUI();
+        }
+    }
+
+    private void UpdateEquippedWeaponUI()
+    {
+        WeaponItem equippedWeapon = GetEquippedWeapon();
+        if (equippedWeapon != null)
+        {
+            string damageRange = equippedWeapon.minDamage.ToString() + " - " + equippedWeapon.maxDamage.ToString();
+            currentDamageRangeText.text = damageRange;
+            currentEquipItemIcon.sprite = equippedWeapon.icon;
+        }
+        else
+        {
+            currentDamageRangeText.text = "";
+            currentEquipItemIcon.sprite = null;
         }
     }
 
     public InventoryItem GetCurrentItem()
     {
-        if(currentIndex >= 0 && currentIndex < inventory.Count)
+        if (currentIndex >= 0 && currentIndex < inventory.Count)
         {
             return inventory[currentIndex].GetComponent<InventoryItem>();
         }
+        return null;
+    }
+
+    public WeaponItem GetEquippedWeapon()
+    {
+        GameObject equipHand = GameObject.FindGameObjectWithTag("EquipHand");
+
+        if (equipHand != null)
+        {
+            WeaponItem equippedWeapon = equipHand.GetComponentInChildren<WeaponItem>();
+            Debug.Log("Equipped Weapon is: " + equippedWeapon.ToString());
+            return equippedWeapon;
+        }
+
         return null;
     }
 }

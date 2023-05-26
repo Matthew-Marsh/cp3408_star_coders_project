@@ -56,7 +56,8 @@ public class EnemyAI : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player");
         }
-        playerHealth = player.gameObject.GetComponent<PlayerHealthController>();
+        //playerHealth = player.gameObject.GetComponent<PlayerHealthController>();
+        playerHealth = GameObject.FindAnyObjectByType<PlayerHealthController>();
 
         // Setting up Combat stats
         currentHealth = maxHealth;

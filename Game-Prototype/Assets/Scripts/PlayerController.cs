@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gameManager;
+    
     [Header("Player Control")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = GameObject.FindAnyObjectByType<GameManager>();
         worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
         playerAudioSource = GetComponent<AudioSource>();
         Debug.Log("Audio: " + worldMusicPlayer.ToString());
@@ -49,11 +52,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Inventory: " + inventory.ToString());
 
         weapon = GameObject.FindGameObjectWithTag("Weapon");
-
-        //equipHandObject = GameObject.FindGameObjectWithTag("EquipHand");
-        //Debug.Log("Equip hand object: " + equipHandObject.ToString());
-        //if (equipHandObject != null)
-            //weapon = equipHandObject.GetComponentInChildren<GameObject>();
 
         Debug.Log("Weapon object: " + weapon.ToString());
 
@@ -174,7 +172,7 @@ public class PlayerController : MonoBehaviour
             // this code controls the player character following the mouse position
             
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Debug.Log(cameraRay.ToString());
+            //Debug.Log(cameraRay.ToString());
             Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
@@ -239,6 +237,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetTrigger("isDead");
             isAlive = false;
+            gameManager.GameOver();
         }
     }
 
@@ -273,6 +272,11 @@ public class PlayerController : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
         foreach (Collider collider in colliders)
         {
+            if (collider.CompareTag("Key"))
+            {
+                gameManager.IncrementKeys();
+            }
+
             if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
             {
                 LootItem lootItem = collider.GetComponent<LootItem>();

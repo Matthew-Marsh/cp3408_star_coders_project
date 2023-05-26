@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         // Start playing Start Menu Audio
         gameManagerAudioSource = this.GetComponent<AudioSource>();
         Scene currentScene = SceneManager.GetActiveScene();
@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
     }
 
     // On start menu if New Game is selected
-        public void StartNewGame()
+    public void StartNewGame()
     {
         ResetLevelNumber();
         StartGame();
@@ -217,6 +217,33 @@ public class GameManager : MonoBehaviour
     {
         return levelNumber;
     }
+
+    // Get number of keys
+    public int GetNumberOfKeys()
+    {
+        return numberOfKeys;
+    }
+
+    // Increment keys
+    public void IncrementKeys()
+    {
+        numberOfKeys++;
+    }
+
+    // Use key
+    public bool UseKey()
+    {
+        if (numberOfKeys >= 1)
+        {
+            numberOfKeys--;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     // Get a random audio clip from an array
     private AudioClip GetRandomAudioClip(AudioClip[] audioClips)

@@ -12,6 +12,7 @@ TagManager:
   - EquipHand
   - PlayerTrigger
   - EnemySpawner
+  - Key
   layers:
   - Default
   - TransparentFX
