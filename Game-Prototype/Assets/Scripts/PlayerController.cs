@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,19 +10,26 @@ public class PlayerController : MonoBehaviour
     private Camera mainCamera;
     Animator anim;
     bool isSprinting;
-    GameObject weapon;
     public bool isWeaponAvailable = true;
     public float coolDownDuration = 2.0f;
     PlayerHealthController health;
     bool isAlive = true;
     public float floorAdjustmentYAxis = 0f;
     public float turnSpeed = 0.9f;
+    GameObject equipHandObject;
+    WeaponItem weapon;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        weapon = GameObject.FindGameObjectWithTag("Weapon");
-        weapon.GetComponent<BoxCollider>().enabled = false;
+        equipHandObject = GameObject.FindWithTag("EquipHand");
+        if (equipHandObject != null)
+            weapon = equipHandObject.GetComponentInChildren<WeaponItem>();
+
+        if (weapon != null)
+            weapon.GetComponent<BoxCollider>().enabled = false;
+
         rb = GetComponent<Rigidbody>();
         mainCamera = FindObjectOfType<Camera>();
         anim = this.GetComponent<Animator>();
@@ -54,7 +59,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            //verticalInput = -1f;
             movement -= mainCamera.transform.forward;
             isMoving = true;
         }
@@ -72,7 +76,7 @@ public class PlayerController : MonoBehaviour
                 isSprinting = false;
             }
 
-            if (CanMove(movement))
+            if (CanMove(movement))  // Stops going through objects/walls
             {
                 movement.y = 0f;
                 movement.Normalize();
@@ -120,7 +124,6 @@ public class PlayerController : MonoBehaviour
             Invoke("DisableWeaponBoxCollider", 2); // Disables cooldown to prevent players walking into enemys to cause damage
             StartCoroutine(StartCooldown());
         }
-
     }
 
     public IEnumerator StartCooldown()
@@ -162,6 +165,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Check if the raycast hits a collider e.g. objects, walls, enemies
     bool CanMove(Vector3 movement)
     {
         float rayDistance = speed * Time.deltaTime;
@@ -169,7 +173,6 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(transform.position, movement, out hit, rayDistance))
         {
-            // Check if the raycast hits a collider
             return !hit.collider;
         }
 
