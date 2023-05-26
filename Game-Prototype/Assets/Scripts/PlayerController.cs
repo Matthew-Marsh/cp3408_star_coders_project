@@ -185,6 +185,11 @@ public class PlayerController : MonoBehaviour
 
                 Vector3 lookDirection = pointToLook - transform.position;
                 lookDirection.y = 0f;
+
+                // Clamping prevents the player from tipping over, can add x clamp is side-to-side becomes issue
+                float clampedYRotation = Mathf.Clamp(lookDirection.y, -45f, 45f);
+                lookDirection.y = clampedYRotation;
+
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 360f * Time.deltaTime);
             }

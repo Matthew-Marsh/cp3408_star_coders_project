@@ -121,6 +121,7 @@ public class InventorySystem : MonoBehaviour
             }
             Destroy(itemToRemove.gameObject);
             UpdateInventoryText();
+            UpdateItemIcon();
         }
 
     }
@@ -133,9 +134,12 @@ public class InventorySystem : MonoBehaviour
         if (equipHand != null)
         {
             weapon.transform.SetParent(equipHand.transform, false);  // Set weapon as child of equipHand
+            weapon.transform.localPosition = Vector3.zero;
+            weapon.transform.localRotation = Quaternion.identity;
             weapon.gameObject.SetActive(true);
         }
         UpdateInventoryText();
+        UpdateItemIcon();
     }
 
     public void UnequipWeapon()
@@ -149,6 +153,7 @@ public class InventorySystem : MonoBehaviour
             equippedWeapon.gameObject.SetActive(false);
             Debug.Log(equippedWeapon.ToString() + " unequipped.");
             UpdateInventoryText();
+            UpdateItemIcon();
         }
     }
 
