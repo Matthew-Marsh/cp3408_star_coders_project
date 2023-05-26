@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 5634532462982891454}
   - component: {fileID: 2093443782267337543}
   - component: {fileID: 4097195505043946274}
-  - component: {fileID: -7890137421933554903}
   - component: {fileID: -112393211853137737}
+  - component: {fileID: 5089828832953581146}
   m_Layer: 0
   m_Name: rust_key
-  m_TagString: Untagged
+  m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,20 +100,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1215533875317036940, guid: 0669f3d8f4b119f418a4bbe061cc198f, type: 3}
---- !u!114 &-7890137421933554903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374289202576707483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd78b7e9d8a7ac54b95248f4efa10900, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keyType: 
-  KeyNameText: {fileID: 0}
 --- !u!65 &-112393211853137737
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -127,3 +113,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.12193201, y: 0.039105855, z: 0.23262405}
   m_Center: {x: 0, y: -9.313226e-10, z: 0.0000000037252903}
+--- !u!114 &5089828832953581146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374289202576707483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73134e60e814aa249a8a80a1fd8aa250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
