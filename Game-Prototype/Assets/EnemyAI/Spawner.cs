@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviour
         //gameManager = GameManager.instance;
         gameManager = FindObjectOfType<GameManager>();
         levelNumber = gameManager.GetLevelNumber();
-        Debug.Log("Level Number: " + levelNumber);
+        //Debug.Log("Level Number: " + levelNumber);
     }
 
     void Start()

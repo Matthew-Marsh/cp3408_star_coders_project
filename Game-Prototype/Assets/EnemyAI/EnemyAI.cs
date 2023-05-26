@@ -29,7 +29,7 @@ public class EnemyAI : MonoBehaviour
     private Vector3 homePosition = Vector3.zero;
 
     NavMeshAgent agent;
-    public enum ActionState { IDLE, WORKING};
+    public enum ActionState { IDLE, WORKING };
     ActionState state = ActionState.IDLE;
 
     Node.Status treeStatus = Node.Status.RUNNING;
@@ -39,6 +39,20 @@ public class EnemyAI : MonoBehaviour
         // Animator
         enemyAnimator = gameObject.GetComponent<Animator>();
 
+        // Get player health controller
+        if (player == null)
+        {
+            Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
+
+            GameObject playerObject = GameObject.FindGameObjectWithTag("PlayerTrigger");
+            if (playerObject != null)
+            {
+                player = playerObject;
+                playerHealth = player.GetComponent<PlayerHealthController>();
+                Debug.Log("Player Health for Enemy AI: " + playerHealth.ToString());
+            }
+        }
+
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
         {
@@ -47,7 +61,7 @@ public class EnemyAI : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         if (player == null)
         {
-            player = GameObject.FindGameObjectWithTag("Player");
+            player = GameObject.FindGameObjectWithTag("PlayerTrigger");
         }
         playerHealth = player.gameObject.GetComponent<PlayerHealthController>();
 
@@ -101,7 +115,7 @@ public class EnemyAI : MonoBehaviour
         patrol.AddChild(isPlayerInRange);
         patrol.AddChild(findWayPoint);
         patrol.AddChild(moveToWayPoint);
-        
+
         // Root Selector
         enemyAction.AddChild(combat);
         enemyAction.AddChild(patrol);
@@ -117,7 +131,7 @@ public class EnemyAI : MonoBehaviour
 
     public Node.Status isEnemyLiving()
     {
-        if (currentHealth <= 0 )
+        if (currentHealth <= 0)
         {
             agent.SetDestination(this.transform.position);
             enemyAnimator.SetTrigger("isDead");
@@ -137,7 +151,7 @@ public class EnemyAI : MonoBehaviour
         {
             return Node.Status.SUCCESS;
         }
-        
+
         return Node.Status.FAILURE;
     }
 
@@ -145,9 +159,11 @@ public class EnemyAI : MonoBehaviour
     {
         if (!playerInRange) return Node.Status.FAILURE;
 
+
+
         if (playerHealth.health == 0) return Node.Status.FAILURE;
 
-        
+
         if (onCoolDown)
         {
             if (!waitingForCoolDown)
@@ -189,7 +205,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     public Node.Status enemyMove()
-    { 
+    {
         Node.Status s = GoToLocation(new Vector3(player.transform.position.x, 0, player.transform.position.z));
         return s;
     }
@@ -238,7 +254,7 @@ public class EnemyAI : MonoBehaviour
             enemyAnimator.SetBool("isWalking", false);
             return Node.Status.FAILURE;
         }
-        else if ( distanceToTarget < 3 || canSeePlayer() || currentHealth <= 0)
+        else if (distanceToTarget < 3 || canSeePlayer() || currentHealth <= 0)
         {
             state = ActionState.IDLE;
             enemyAnimator.SetBool("isWalking", false);
@@ -259,7 +275,7 @@ public class EnemyAI : MonoBehaviour
         float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
         if (lookAngle < 65 && Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
         {
-            if (raycastInfo.transform.gameObject.tag == "Player")
+            if (raycastInfo.transform.gameObject.tag == "PlayerTrigger")
             {
                 return true;
             }
@@ -269,7 +285,7 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) 
+        if (other.gameObject.CompareTag("PlayerTrigger"))
         {
             playerInRange = true;
         }
@@ -277,7 +293,7 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("PlayerTrigger"))
         {
             playerInRange = false;
         }
@@ -286,12 +302,13 @@ public class EnemyAI : MonoBehaviour
 
     public void takeDamage(int damage)
     {
-        if (currentHealth > 0) {
+        if (currentHealth > 0)
+        {
             currentHealth -= damage;
             enemyAnimator.SetTrigger("isHurt");
         }
     }
-    
+
     void coolDown()
     {
         if (onCoolDown)

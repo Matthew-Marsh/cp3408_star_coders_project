@@ -1,31 +1,61 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Player Control")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
+    public bool isWeaponAvailable = true;
+    public float coolDownDuration = 2.0f;
+    public float floorAdjustmentYAxis = 0f;
+    public float turnSpeed = 0.9f;
     float speed;
+
+    [Header("Audio")]
+    public AudioClip inventoryPickUpAudio;
+    public AudioClip consumableAudioClip;
+    public AudioClip weaponAudioClip;
+    private AudioSource playerAudioSource;
+    WorldMusicPlayer worldMusicPlayer;
+
+    [Header("Invetory")]
+    public float interactRange = 5f;
+    private InventorySystem inventory;
+
     private Rigidbody rb;
     private Camera mainCamera;
     Animator anim;
     bool isSprinting;
-    public bool isWeaponAvailable = true;
-    public float coolDownDuration = 2.0f;
-    PlayerHealthController health;
     bool isAlive = true;
-    public float floorAdjustmentYAxis = 0f;
-    public float turnSpeed = 0.9f;
-    GameObject equipHandObject;
-    WeaponItem weapon;
+   
+    PlayerHealthController health;
+    GameObject weapon;
 
+    private void Awake()
+    {
+        worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+        playerAudioSource = GetComponent<AudioSource>();
+        Debug.Log("Audio: " + worldMusicPlayer.ToString());
+        Debug.Log("Audio: " + playerAudioSource.ToString());
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        equipHandObject = GameObject.FindWithTag("EquipHand");
-        if (equipHandObject != null)
-            weapon = equipHandObject.GetComponentInChildren<WeaponItem>();
+        inventory = FindObjectOfType<InventorySystem>();
+        worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.Idle);
+        Debug.Log("Inventory: " + inventory.ToString());
+
+        weapon = GameObject.FindGameObjectWithTag("Weapon");
+
+        //equipHandObject = GameObject.FindGameObjectWithTag("EquipHand");
+        //Debug.Log("Equip hand object: " + equipHandObject.ToString());
+        //if (equipHandObject != null)
+            //weapon = equipHandObject.GetComponentInChildren<GameObject>();
+
+        Debug.Log("Weapon object: " + weapon.ToString());
 
         if (weapon != null)
             weapon.GetComponent<BoxCollider>().enabled = false;
@@ -142,7 +172,9 @@ public class PlayerController : MonoBehaviour
             AttackControl();
 
             // this code controls the player character following the mouse position
+            
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Debug.Log(cameraRay.ToString());
             Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
@@ -155,6 +187,46 @@ public class PlayerController : MonoBehaviour
                 lookDirection.y = 0f;
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 360f * Time.deltaTime);
+            }
+
+            // Pick up loot
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                TryPickUpLoot();
+            }
+
+            // Go back an inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                inventory.ChangeItem(false);
+                Debug.Log("Change Item Back.");
+            }
+
+            // Use inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                InventoryItem currentItem = inventory.GetCurrentItem();
+                if (currentItem != null)
+                {
+                    if (currentItem.CompareTag("Weapon"))
+                    {
+                        PlayAudioClip(weaponAudioClip, playerAudioSource);
+                    }
+                    else if (currentItem.CompareTag("Loot"))
+                    {
+                        PlayAudioClip(consumableAudioClip, playerAudioSource);
+                    }
+                }
+                inventory.UseItem();
+                Debug.Log("Use Item.");
+
+            }
+
+            // Go forward an inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                inventory.ChangeItem(true);
+                Debug.Log("Change Item Forward.");
             }
         }
 
@@ -177,5 +249,39 @@ public class PlayerController : MonoBehaviour
         }
 
         return true;
+    }
+
+    // Play audio clip
+    private void PlayAudioClip(AudioClip clip, AudioSource audioSource)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.loop = false;
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
+
+    // Try to pick up loot
+    private void TryPickUpLoot()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
+            {
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                if (lootItem != null && !lootItem.IsClaimed())
+                {
+                    lootItem.SetClaimed();
+                    PlayAudioClip(inventoryPickUpAudio, playerAudioSource);
+                    Debug.Log(lootItem.ToString() + " claimed.");
+
+                    inventory.AddToInventory(collider.gameObject);
+                    Debug.Log(collider.gameObject.ToString() + " picked up.");
+                    break;
+                }
+            }
+        }
     }
 }

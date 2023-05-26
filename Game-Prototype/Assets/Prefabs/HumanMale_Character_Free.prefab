@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1678375337}
   - component: {fileID: 1678375338}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: PlayerTrigger
   m_TagString: PlayerTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,8 +42,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.25
+  m_Height: 0.9
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4957605392443804131
@@ -2521,7 +2521,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4957605393579145644}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.32
   m_Height: 1.81
@@ -2559,6 +2559,10 @@ MonoBehaviour:
   coolDownDuration: 2
   floorAdjustmentYAxis: -3.004844
   turnSpeed: 0
+  inventoryPickUpAudio: {fileID: 8300000, guid: ca056d4afe5e74498a0798f16e0e866d, type: 3}
+  consumableAudioClip: {fileID: 8300000, guid: 7c7c0a86e2d72ba4985f437397013dd6, type: 3}
+  weaponAudioClip: {fileID: 8300000, guid: 525e46c77be971c478ab66347c19e920, type: 3}
+  interactRange: 5
 --- !u!54 &1390196227
 Rigidbody:
   m_ObjectHideFlags: 0

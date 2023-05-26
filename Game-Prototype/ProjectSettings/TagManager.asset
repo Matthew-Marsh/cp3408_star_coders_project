@@ -11,6 +11,7 @@ TagManager:
   - Loot
   - EquipHand
   - PlayerTrigger
+  - EnemySpawner
   layers:
   - Default
   - TransparentFX
