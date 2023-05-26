@@ -33,40 +33,22 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
-        //float horizontalInput = Input.GetAxis("Horizontal");
-        //float verticalInput = Input.GetAxis("Vertical");
-        //Vector3 movement = new Vector3(-horizontalInput, 0f, verticalInput).normalized;
-        //bool isMoving = Mathf.Abs(horizontalInput) > 0 || Mathf.Abs(verticalInput) > 0;
-        //Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
         bool isMoving = false;
         Vector3 movement = Vector3.zero;
 
-        //float horizontalInput = 0f;
-        //float verticalInput = 0f;
-        //bool isMoving = false;
-        //Vector3 movement = new Vector3(-horizontalInput, 0f, verticalInput).normalized;
-
-        //Vector3 mousePosition = Input.mousePosition;
-        //Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, mainCamera.transform.position.y));
-        //Vector3 movement = (mouseWorldPosition - transform.position).normalized;
-
         if (Input.GetKey(KeyCode.A))
         {
-            //horizontalInput = -1f;
             movement -= mainCamera.transform.right;
             isMoving = true;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            //horizontalInput = 1f;
             movement += mainCamera.transform.right;
             isMoving = true;
         }
 
-        // Check for vertical movement
         if (Input.GetKey(KeyCode.W))
         {
-            //verticalInput = 1f;
             movement += mainCamera.transform.forward;
             isMoving = true;
         }
@@ -76,8 +58,6 @@ public class PlayerController : MonoBehaviour
             movement -= mainCamera.transform.forward;
             isMoving = true;
         }
-
-        //Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
         if (isMoving)
         {
@@ -92,129 +72,25 @@ public class PlayerController : MonoBehaviour
                 isSprinting = false;
             }
 
-            //Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            //Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
-            //float rayLength;
+            if (CanMove(movement))
+            {
+                movement.y = 0f;
+                movement.Normalize();
+                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
-            //if (groundPlane.Raycast(cameraRay, out rayLength))
-            //{
-            //    Vector3 pointToLook = cameraRay.GetPoint(rayLength);
-            //    Vector3 lookDirection = pointToLook - transform.position;
-            //    lookDirection.y = 0f;
-            //    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            //    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-            //}
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
 
-            //Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            //transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
-
-            movement.y = 0f;
-            movement.Normalize();
-            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
-
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
+                transform.position += movement * speed * Time.deltaTime;
+            }
             else
-                anim.SetTrigger("isWalkFwd");
-
-            transform.position += movement * speed * Time.deltaTime;
+            {
+                anim.SetTrigger("isIdle");
+            }
         }
-        else
-        {
-            anim.SetTrigger("isIdle");
-        }
-
-        //if (Input.GetKey("left shift"))
-        //{
-        //    speed = sprintSpeed;
-        //    isSprinting = true;
-        //}
-        //else
-        //{
-        //    speed = walkSpeed;
-        //    isSprinting = false;
-        //}
-        //if (movement.magnitude > 0)
-        //{
-        //    Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-        //    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360f * Time.deltaTime);
-
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunFwd");
-        //    else
-        //        anim.SetTrigger("isWalkFwd");
-
-        //    transform.position += movement * speed * Time.deltaTime;
-        //}
-        //if (Input.GetKey("w") && Input.GetKey("a"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunLeft");
-        //    else
-        //        anim.SetTrigger("isWalkLeft");
-        //    transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        //}
-        //else if (Input.GetKey("w") && Input.GetKey("d"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunRight");
-        //    else
-        //        anim.SetTrigger("isWalkRight");
-        //    transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        //}
-        //else if (Input.GetKey("s") && Input.GetKey("a"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunBck");
-        //    else
-        //        anim.SetTrigger("isWalkBck");
-        //    transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        //}
-        //else if (Input.GetKey("s") && Input.GetKey("d"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunBck");
-        //    else
-        //        anim.SetTrigger("isWalkBck");
-        //    transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        //}
-        //else if (Input.GetKey("d"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunFwd");
-        //    else
-        //        anim.SetTrigger("isWalkFwd");
-        //    transform.position += Vector3.right * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey("a"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunFwd");
-        //    else
-        //        anim.SetTrigger("isWalkFwd");
-        //    transform.position += Vector3.left * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey("w"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunFwd");
-        //    else
-        //        anim.SetTrigger("isWalkFwd");
-        //    transform.position += Vector3.forward * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey("s"))
-        //{
-        //    if (isSprinting)
-        //        anim.SetTrigger("isRunBck");
-        //    else
-        //        anim.SetTrigger("isWalkBck");
-        //    transform.position += Vector3.back * speed * Time.deltaTime;
-        //}
-        //else
-        //{
-        //    anim.SetTrigger("isIdle");
-        //}
     }
 
     // Disables the box collider on the players weapon
@@ -257,7 +133,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isAlive == true)
+        if (isAlive == true)
         {
             MovementControl();
             AttackControl();
@@ -267,7 +143,7 @@ public class PlayerController : MonoBehaviour
             Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
-            if(groundPlane.Raycast(cameraRay, out rayLength))
+            if (groundPlane.Raycast(cameraRay, out rayLength))
             {
                 Vector3 pointToLook = cameraRay.GetPoint(rayLength);
                 Debug.DrawLine(cameraRay.origin, pointToLook, Color.blue);
@@ -276,7 +152,6 @@ public class PlayerController : MonoBehaviour
                 lookDirection.y = 0f;
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 360f * Time.deltaTime);
-                //transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
             }
         }
 
@@ -285,5 +160,19 @@ public class PlayerController : MonoBehaviour
             anim.SetTrigger("isDead");
             isAlive = false;
         }
+    }
+
+    bool CanMove(Vector3 movement)
+    {
+        float rayDistance = speed * Time.deltaTime;
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, movement, out hit, rayDistance))
+        {
+            // Check if the raycast hits a collider
+            return !hit.collider;
+        }
+
+        return true;
     }
 }
