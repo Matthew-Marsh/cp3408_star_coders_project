@@ -11,13 +11,13 @@ public class CameraFollowPlayer : MonoBehaviour
     public float MoveSpeed = 400f;
     private Transform cameraTransform; // How much the camera gets offset from the player 
     GameObject playerObject;
-    public float distance = 5f;
-    public float height = 3f;
+    public float moveSpeed = 5f;
     public float snapThreshold = 0.9f;
 
     private void Awake()
     {
         cameraTransform = transform;
+
         // Needs to be done in awake and on start due to character spawn
         if (followPlayer == null)
         {
@@ -66,16 +66,26 @@ public class CameraFollowPlayer : MonoBehaviour
             //cameraTransform.position = Vector3.Lerp(cameraTransform.position, followPlayer.position + playerOffset,
             //                             MoveSpeed * Time.deltaTime);
 
-            Vector3 targetPosition = followPlayer.position - followPlayer.forward * distance + Vector3.up * height;
+            Vector3 targetPosition = followPlayer.position + followPlayer.forward * playerOffset.z + followPlayer.up * playerOffset.y;
+            Quaternion targetRotation = Quaternion.LookRotation(followPlayer.forward, Vector3.up);
+
+            // Check if the player is walking forward based on dot product
             Vector3 cameraDirection = cameraTransform.position - followPlayer.position;
             float dotProduct = Vector3.Dot(followPlayer.forward, cameraDirection.normalized);
 
             if (dotProduct >= snapThreshold)
             {
+                // Snap camera to the target position and rotation
                 cameraTransform.position = targetPosition;
-                Quaternion desiredRotation = Quaternion.LookRotation(-followPlayer.forward, Vector3.up);
-                cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, desiredRotation, 10f * Time.deltaTime);
+                cameraTransform.rotation = targetRotation;
+            }
+            else
+            {
+                // Smoothly move and rotate the camera towards the target position and rotation
+                cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetPosition, moveSpeed * Time.deltaTime);
+                cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, moveSpeed * Time.deltaTime);
             }
         }
+
     }
 }

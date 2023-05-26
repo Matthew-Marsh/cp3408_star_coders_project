@@ -2541,7 +2541,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
-  healthBar: {fileID: 0}
 --- !u!114 &1174070156951865619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2558,6 +2557,7 @@ MonoBehaviour:
   sprintSpeed: 10
   isWeaponAvailable: 1
   coolDownDuration: 2
+  floorAdjustmentYAxis: -3.004844
 --- !u!54 &1390196227
 Rigidbody:
   m_ObjectHideFlags: 0

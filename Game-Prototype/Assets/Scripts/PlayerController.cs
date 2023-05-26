@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float coolDownDuration = 2.0f;
     PlayerHealthController health;
     bool isAlive = true;
+    public float floorAdjustmentYAxis = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -173,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
             // this code controls the player character following the mouse position
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
             if(groundPlane.Raycast(cameraRay, out rayLength))

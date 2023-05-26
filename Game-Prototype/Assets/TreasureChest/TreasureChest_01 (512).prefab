@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 370222450dd06474dbee897a63b09f75, type: 2}
+  - {fileID: 2100000, guid: 4c7eab2ea5656c441b75ea5de116035d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -199,7 +199,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 370222450dd06474dbee897a63b09f75, type: 2}
+  - {fileID: 2100000, guid: 4c7eab2ea5656c441b75ea5de116035d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -245,6 +245,46 @@ PrefabInstance:
       propertyPath: chestAnimator
       value: 
       objectReference: {fileID: 95000012375180254}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1000012970591572, guid: 7cafb89b5a0f61f479d0a748962abbbc, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 4260819330917749670, guid: 3b4b27421c2a6de4f88b36cc36531976, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 9190878331159525150, guid: 696547c1f5c9dbc45978c7720f94b01e, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 9190878331159525150, guid: 4edc3603e15f0884b937810156617f74, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 9190878331159525150, guid: 6590e99a522921647ac15769767472cd, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 2017372464273290904, guid: 0a0917aa8d5a96c4dac34dd56cf9cc3b, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 5875270693028758024, guid: 3058356566addd04d8ab52928169b5e2, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 4260819330917749670, guid: 3b4b27421c2a6de4f88b36cc36531976, type: 3}
+    - target: {fileID: 2115056882, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
+      propertyPath: lootPrefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 1000013317980782, guid: 2cf6690298568294cb6b655c0a3aeb87, type: 3}
     - target: {fileID: 1509452883521267212, guid: e195ee2d48389be46aa0f59a4cab6ee5, type: 3}
       propertyPath: m_Name
       value: Barrier
