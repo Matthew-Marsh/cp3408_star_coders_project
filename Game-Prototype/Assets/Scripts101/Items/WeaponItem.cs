@@ -19,7 +19,7 @@ public class WeaponItem : InventoryItem
         inventorySystem.EquipWeapon(this);
     }
 
-   private int GenereateDamage()
+   public int GenereateDamage()
     {
         return Random.Range(minDamage, maxDamage + 1);
     }

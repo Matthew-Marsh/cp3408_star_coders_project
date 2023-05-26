@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class MeleeCollision : MonoBehaviour
 {
-    private int damage;
     bool isDamageAvailable = true;
     public float coolDownDuration = 2.0f;
-
-    private void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -25,7 +19,19 @@ public class MeleeCollision : MonoBehaviour
         {
             Debug.Log("Enter");
             GameObject enemy = collision.gameObject;
-            //enemy.GetComponent<EnemyAI>().TakeDamage(damage);
+
+            // Get damage amount from the equipped weapon
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                WeaponItem equippedWeapon = player.GetComponentInChildren<WeaponItem>();
+                if (equippedWeapon != null)
+                {
+                    int damage = equippedWeapon.GenereateDamage();
+                    Debug.Log("Damage: " + damage);
+                    enemy.GetComponent<EnemyAI>().TakeDamage(damage);
+                }
+            }
             StartCoroutine(StartCooldown());
         }
     }
