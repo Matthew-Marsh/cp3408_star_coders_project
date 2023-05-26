@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8886211950903165030}
   - component: {fileID: -6946322758754382497}
   - component: {fileID: -1161353463651627498}
+  - component: {fileID: 8474805761963963381}
   m_Layer: 0
   m_Name: Staff_Basic
   m_TagString: Weapon
@@ -127,3 +128,16 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 3fa53af4c50543b469421a6895537de8, type: 3}
   minDamage: 5
   maxDamage: 10
+--- !u!114 &8474805761963963381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4417435450986619218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolDownDuration: 2

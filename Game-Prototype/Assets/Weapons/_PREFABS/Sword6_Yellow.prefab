@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5854158559006458434}
   - component: {fileID: -5931130205120194521}
   - component: {fileID: 2143975271598841248}
+  - component: {fileID: -8949018978728537369}
   m_Layer: 0
   m_Name: Sword6_Yellow
   m_TagString: Weapon
@@ -127,3 +128,16 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 80177e2bd989ef744ad7f44461a7738e, type: 3}
   minDamage: 5
   maxDamage: 10
+--- !u!114 &-8949018978728537369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017372464273290904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolDownDuration: 2

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5192774692862516689}
   - component: {fileID: 8800068757435964747}
   - component: {fileID: 5655077073975776698}
+  - component: {fileID: 7004871626469256295}
   m_Layer: 0
   m_Name: Wand_Basic
   m_TagString: Weapon
@@ -127,3 +128,16 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 875e780675f3072448f9450848f52d21, type: 3}
   minDamage: 5
   maxDamage: 10
+--- !u!114 &7004871626469256295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6262986123301899059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolDownDuration: 2

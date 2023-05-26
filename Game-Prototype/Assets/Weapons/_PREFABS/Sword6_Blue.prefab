@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4958212146185363400}
   - component: {fileID: -1494556759066603843}
   - component: {fileID: 2952809320871732110}
+  - component: {fileID: 4352517438645093658}
   m_Layer: 0
   m_Name: Sword6_Blue
   m_TagString: Weapon
@@ -127,3 +128,16 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 9d88cfe62458b834f9fd0b2fc20042d4, type: 3}
   minDamage: 5
   maxDamage: 10
+--- !u!114 &4352517438645093658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017372464273290904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolDownDuration: 2
