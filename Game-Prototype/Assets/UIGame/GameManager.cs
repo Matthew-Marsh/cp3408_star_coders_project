@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -70,10 +71,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        logFilePath = Path.Combine(Application.persistentDataPath, "FallenStarDebugLog.txt");
-        // Clear the log file if it already exists
-        if (File.Exists(logFilePath))
-            File.Delete(logFilePath);
+        Debug.Log("Create Debug Log File.");
+        LogMessage("Start of Debug File.");
+        LogMessage("Checking Start Menu Camera...");
+        // Find and log active camera - Build testing
+        Camera camera = FindObjectOfType<Camera>();
+        if (camera != null)
+        {
+            LogMessage("Checking Components...");
+            Component[] scripts = camera.GetComponents<MonoBehaviour>();
+            LogMessage("Active Camera: " + camera.name);
+            foreach (Component script in scripts)
+            {
+                LogMessage("Camera script attached: " + script.GetType().Name);
+            }
+        }
+        else
+        {
+            Debug.Log("No camera found.");
+        }
     }
 
     // On start menu if Play is selected continue saved from save
@@ -100,8 +116,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("One or more audio source/manager were null.");
             gameManagerAudioSource = GetComponent<AudioSource>();
-            gameManagerAudioSource.mute = false;
         }
+        gameManagerAudioSource.Stop();
         PlayAudioClip(selectButtonAudioClip, false);
 
         // Load and wait for scene load
@@ -119,7 +135,6 @@ public class GameManager : MonoBehaviour
         // Find audio
         worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
         gameManagerAudioSource = GetComponent<AudioSource>();
-        gameManagerAudioSource.mute = true;
     }
 
     // Increment level
@@ -161,7 +176,6 @@ public class GameManager : MonoBehaviour
         AudioSource worldMusicAudioSource = worldMusicPlayer.GetComponent<AudioSource>();
         worldMusicAudioSource.mute = true;
 
-        gameManagerAudioSource.mute = false;
         PlayAudioClip(onDeathAudioClip, false);
         levelNumber = 0;
         numberOfKeys = 0;
@@ -172,7 +186,6 @@ public class GameManager : MonoBehaviour
     public void ExitGame()
     {
         Debug.Log("Exit Game");
-        gameManagerAudioSource.mute = false;
         PlayAudioClip(selectButtonAudioClip, false);
         PlayerPrefs.SetInt("LevelNumber", levelNumber);
         Application.Quit();
@@ -181,8 +194,7 @@ public class GameManager : MonoBehaviour
     // Open pause menu and pause game
     public void PauseGame()
     {
-        Debug.Log("Game Paused");
-        LogMessage("Active Camera: " + Camera.main.name);
+        LogMessage("Game Paused");
         activateUI("pauseMenuUI");
 
         Time.timeScale = 0f;  // Freeze time
@@ -192,11 +204,33 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("One or more audio source/manager were null.");
             worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+            Debug.Log("World Audio Source: " + worldMusicPlayer.ToString());
             gameManagerAudioSource = GetComponent<AudioSource>();
+            Debug.Log("Game Audio Source: " + gameManagerAudioSource.ToString());
         }
-        gameManagerAudioSource.mute = false;
-        PlayAudioClip(selectButtonAudioClip, false);
+        AmbientMusicPlayer ambientMusicPlayer = FindObjectOfType<AmbientMusicPlayer>();
+        ambientMusicPlayer.GetComponent<AudioSource>().mute = true;
+        
+        //PlayAudioClip(selectButtonAudioClip, false);
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.InMenu);
+
+        // Find and log active camera - Build testing
+        LogMessage("Checking Start Scene Camera...");
+        Camera camera = FindObjectOfType<Camera>();
+        if (camera != null)
+        {
+            LogMessage("Checking Components...");
+            Component[] scripts = camera.GetComponents<MonoBehaviour>();
+            LogMessage("Active Camera: " + camera.name);
+            foreach (Component script in scripts)
+            {
+                LogMessage("Camera script attached: " + script.GetType().Name);
+            }
+        }
+        else
+        {
+            LogMessage("No camera found.");
+        }
     }
 
     // Resume game from pause menu
@@ -209,10 +243,13 @@ public class GameManager : MonoBehaviour
             worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
             gameManagerAudioSource = GetComponent<AudioSource>();
         }
-        PlayAudioClip(selectButtonAudioClip, false);
-        gameManagerAudioSource.mute = true;
+
+        //PlayAudioClip(selectButtonAudioClip, false);
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.Idle);
-        
+
+        AmbientMusicPlayer ambientMusicPlayer = FindObjectOfType<AmbientMusicPlayer>();
+        ambientMusicPlayer.GetComponent<AudioSource>().mute = false;
+
         activateUI("gamePlayUI");
         Time.timeScale = 1f;
 
@@ -266,13 +303,23 @@ public class GameManager : MonoBehaviour
     // Play audio clip, nominate looping or not
     private void PlayAudioClip(AudioClip clip, bool loopCondition)
     {
-        Debug.Log("Audio check.");
-        Debug.Log("Clip: " + clip.ToString());
-        Debug.Log("Game manager audio source: " + gameManagerAudioSource.ToString());
-        gameManagerAudioSource.loop = loopCondition;
+        if (gameManagerAudioSource == null)
+        {
+            Debug.Log("Audio source was missing.");
+            gameManagerAudioSource = GetComponent<AudioSource>();
+        }
 
         if (clip == null)
             return;
+
+        gameManagerAudioSource.enabled = true;
+        gameManagerAudioSource.mute = false;
+        gameManagerAudioSource.loop = loopCondition;
+
+        Debug.Log("Audio check.");
+        Debug.Log("Clip: " + clip.ToString());
+        Debug.Log("Game manager audio source: " + gameManagerAudioSource.ToString());
+        Debug.Log("Game manager audio source enabled: " + gameManagerAudioSource.enabled);
 
         gameManagerAudioSource.PlayOneShot(clip);
     }
@@ -282,7 +329,7 @@ public class GameManager : MonoBehaviour
         // Update scene name to active scene
         currentScene = SceneManager.GetActiveScene();
         currentSceneName = currentScene.name;
-        Debug.Log("Curren Scene Name: " + currentSceneName);
+        Debug.Log("Current Scene Name: " + currentSceneName);
 
         if (currentSceneName == "StartScene")
         {
@@ -296,7 +343,7 @@ public class GameManager : MonoBehaviour
                 .FirstOrDefault(canvas => canvas.name == "UIDeathMenu");
 
             // Debug for each instance
-            Debug.Log("GameManager instance created.");
+            Debug.Log("GameManager looking for UI...");
             Debug.Log("GamePlayUI found: " + (gamePlayUI != null));
             Debug.Log("EndLevelUI found: " + (endLevelUI != null));
             Debug.Log("PauseMenuUI found: " + (pauseMenuUI != null));
@@ -350,9 +397,21 @@ public class GameManager : MonoBehaviour
 
     private void LogMessage(string message)
     {
-        using (StreamWriter writer = File.AppendText(logFilePath))
+        if (string.IsNullOrEmpty(logFilePath))
         {
-            writer.WriteLine(message);
+            logFilePath = Path.Combine(@"C:\Users\User\Documents\Academic\CP3408_A2\cp3408_protoytpe_10", "FallenStarDebugLog.txt");
+
+            //// Clear the log file if it already exists
+            //if (File.Exists(logFilePath))
+            //    File.Delete(logFilePath);
+        }
+        else
+        {
+            using (StreamWriter writer = File.AppendText(logFilePath))
+            {
+                writer.WriteLine(message);
+            }
+            Debug.Log("Logged: " + message);
         }
     }
 }
