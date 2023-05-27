@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     bool isSprinting;
     bool isAlive = true;
     public bool isMoving;
+    private bool isInIdleCooldown = false;
 
     PlayerHealthController health;
     GameObject weapon;
@@ -170,16 +171,24 @@ public class PlayerController : MonoBehaviour
                     anim.SetTrigger("isWalkRight");
             }
 
-            //playerMusicPlayer.GetComponent<AudioSource>().mute = true;
             transform.position += movement * speed * Time.deltaTime;
         }
         else
         {
             anim.SetTrigger("isIdle");
-            //playerMusicPlayer.GetComponent<AudioSource>().mute = false;
-            playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Idle);
+            if (!isInIdleCooldown)
+            {
+                playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Idle);
+                isInIdleCooldown = true;
+            }
+            Invoke("DelayedIdleState", 20f);
         }
         //}
+    }
+
+    private void DelayedIdleState()
+    {
+        isInIdleCooldown = false;
     }
 
     // Disables the box collider on the players weapon

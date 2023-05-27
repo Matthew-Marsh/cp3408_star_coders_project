@@ -2707,17 +2707,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f7d65330e5dcd5c4ea50fe9cc0425f25, type: 3}
   - {fileID: 8300000, guid: dc22163a2ca86cf4aa91530a40e15041, type: 3}
   attackClips:
-  - {fileID: 8300000, guid: bcdeed9190f3641f4887ff7cbea4dd66, type: 3}
-  - {fileID: 8300000, guid: 26e9b0607a7504b8ca6ae8b0b885ab08, type: 3}
   - {fileID: 8300000, guid: 4a578695dfac4422d81299af3481ea10, type: 3}
   - {fileID: 8300000, guid: 67dd73a8fb8b99e4d8c8d793c86c4324, type: 3}
   - {fileID: 8300000, guid: d64e91cef03af304fa237225b23c5707, type: 3}
   - {fileID: 8300000, guid: 80151380c0f818243b66a78ef69c9fcd, type: 3}
   - {fileID: 8300000, guid: 37f12e8bae0ff4b458e855f94ecc795f, type: 3}
   - {fileID: 8300000, guid: 01999991d21504b5abb7a554bba05227, type: 3}
-  - {fileID: 8300000, guid: 74198389e177d0948b63ca9a3fb22801, type: 3}
-  - {fileID: 8300000, guid: e5ecc98ff40556543b77c8c2aa090822, type: 3}
-  - {fileID: 8300000, guid: a37109c51cd477548ad1c882be3971d5, type: 3}
   - {fileID: 8300000, guid: 13182107f288fdc47a11f9216c8f062b, type: 3}
   - {fileID: 8300000, guid: 7053294e066eb1945baa4d9cc9194f15, type: 3}
   - {fileID: 8300000, guid: 32b2a2d4cc24b644aa82dd931fddb620, type: 3}
@@ -2729,7 +2724,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 28035043174d44f928d428fc44f59150, type: 3}
   - {fileID: 8300000, guid: 5174415e9879415498f7b0dd794d19c5, type: 3}
   - {fileID: 8300000, guid: 2a295373a10441545bcaf619b61bea94, type: 3}
-  - {fileID: 8300000, guid: 35ce408210dfa9843ba14da86f8efb4e, type: 3}
   - {fileID: 8300000, guid: 2135b07382ab043e3a8947ca810d9bfa, type: 3}
 --- !u!114 &7784661992407408960
 MonoBehaviour:

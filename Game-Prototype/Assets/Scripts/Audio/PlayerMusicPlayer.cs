@@ -103,31 +103,34 @@ public class PlayerMusicPlayer : MonoBehaviour
 
     public void SetPlayerState(PlayerState newPlayerState)
     {
-        playerState = newPlayerState;
-
-        switch (playerState)
+        if (playerState != newPlayerState)
         {
-            case PlayerState.Idle:
-                playerAudioCoolDown = playerIdleAudioCoolDown;
-                break;
-            case PlayerState.Attacking:
-                playerAudioCoolDown = playerAttackAudioCoolDown;
-                break;
-            case PlayerState.Hurt:
-                playerAudioCoolDown = playerHurtAudioCoolDown;
-                break;
-            default:
-                playerAudioCoolDown = 2f;
-                break;
+            playerState = newPlayerState;
 
-        }
+            switch (playerState)
+            {
+                case PlayerState.Idle:
+                    playerAudioCoolDown = playerIdleAudioCoolDown;
+                    break;
+                case PlayerState.Attacking:
+                    playerAudioCoolDown = playerAttackAudioCoolDown;
+                    break;
+                case PlayerState.Hurt:
+                    playerAudioCoolDown = playerHurtAudioCoolDown;
+                    break;
+                default:
+                    playerAudioCoolDown = 2f;
+                    break;
 
-        if (isPlaying)
-        {
-            playerMusicAudioSource.Stop();
-            isPlaying = false;
+            }
+
+            if (isPlaying)
+            {
+                playerMusicAudioSource.Stop();
+                isPlaying = false;
+            }
+            PlayRandomAudioClip();
         }
-        PlayRandomAudioClip();
     }
 
     float GetRandomCoolDownDuration()
