@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour
     public int maxHealth = 100;
     public int attackTimer = 1;
     public float attackRange = 2;
-    public float attackDamage = 10;
+    public float attackDamage = 2;
 
     [Header("Roam Settings")]
     Vector3 roamGoal;

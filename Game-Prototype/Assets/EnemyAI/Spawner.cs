@@ -51,26 +51,28 @@ public class Spawner : MonoBehaviour
         float levelMultiplier = levelNumber + (levelNumber / 2);
         float numberBasicEnemiesToSpawn;
         float numberAdvEnemiesToSpawn;
-        
+
         if (levelNumber > 1)
         {
             numberBasicEnemiesToSpawn = Mathf.Round(numberEnemiesToSpawn * levelMultiplier);
             numberAdvEnemiesToSpawn = levelNumber - 1;
-        } 
+        }
         else
         {
             numberBasicEnemiesToSpawn = numberEnemiesToSpawn;
             numberAdvEnemiesToSpawn = 0;
         }
-        
+
         for (int i = 0; i < numberBasicEnemiesToSpawn; i++)
         {
             Instantiate(enemyBasic, this.transform.position, Quaternion.identity);
         }
-
-        for (int i = 0; i < numberAdvEnemiesToSpawn; i++)
+        if (levelNumber > 1)  // Advanced enemies only after the first level
         {
-            Instantiate(enemyAdvanced, this.transform.position, Quaternion.identity);
+            for (int i = 0; i < numberAdvEnemiesToSpawn; i++)
+            {
+                Instantiate(enemyAdvanced, this.transform.position, Quaternion.identity);
+            }
         }
     }
 

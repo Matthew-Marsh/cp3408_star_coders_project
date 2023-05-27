@@ -20,7 +20,7 @@ public class Lock : MonoBehaviour
         {
             if (gameManager.UseKey())
             {
-                Destroy(this);
+                Destroy(gameObject);
             }
         }
     }

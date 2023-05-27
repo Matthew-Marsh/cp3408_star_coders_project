@@ -50,5 +50,5 @@ MonoBehaviour:
   detectionRange: 5
   numberExistingEnemies: 0
   enemyBasic: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}
-  enemyAdvanced: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}
+  enemyAdvanced: {fileID: 1809680881062764, guid: 4b69505fdd1b3fe4fb9aef1f35f78a70, type: 3}
   playerInRange: 0

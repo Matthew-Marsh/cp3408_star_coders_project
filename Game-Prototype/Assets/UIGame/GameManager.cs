@@ -70,7 +70,6 @@ public class GameManager : MonoBehaviour
     public void ContinueGame()
     {
         levelNumber = PlayerPrefs.HasKey("LevelNumber") ? PlayerPrefs.GetInt("LevelNumber") : 1;
-        numberOfKeys = PlayerPrefs.HasKey("NumberOfKeys") ? PlayerPrefs.GetInt("NumberOfKeys") : 0;
         StartGame();
     }
 
@@ -155,6 +154,7 @@ public class GameManager : MonoBehaviour
         gameManagerAudioSource.mute = false;
         PlayAudioClip(onDeathAudioClip, false);
         levelNumber = 0;
+        numberOfKeys = 0;
         activateUI("deathMenuUI");
     }
 
@@ -165,7 +165,6 @@ public class GameManager : MonoBehaviour
         gameManagerAudioSource.mute = false;
         PlayAudioClip(selectButtonAudioClip, false);
         PlayerPrefs.SetInt("LevelNumber", levelNumber);
-        PlayerPrefs.SetInt("NumberOfKeys", numberOfKeys);
         Application.Quit();
     }
 
