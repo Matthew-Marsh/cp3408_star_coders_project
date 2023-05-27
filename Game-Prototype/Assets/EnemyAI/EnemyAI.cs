@@ -7,6 +7,8 @@ public class EnemyAI : MonoBehaviour
     public Animator enemyAnimator;
 
     EnemyMusicPlayer enemyMusicPlayer;
+    private GameManager gameManager;
+    private int levelNumber;
 
     BehaviourTree tree;
     public GameObject player;
@@ -43,6 +45,11 @@ public class EnemyAI : MonoBehaviour
         // Audio
         enemyMusicPlayer = FindObjectOfType<EnemyMusicPlayer>();
         Debug.Log("Audio Enemy Player: " + enemyMusicPlayer.ToString());
+
+        // Game Manager for level number increase attack damager each level e.g. Level 2 attack x 1.2
+        gameManager = FindObjectOfType<GameManager>();
+        levelNumber = gameManager.GetLevelNumber();
+        attackDamage *= 1.0f + (0.1f * (levelNumber - 1));
 
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
