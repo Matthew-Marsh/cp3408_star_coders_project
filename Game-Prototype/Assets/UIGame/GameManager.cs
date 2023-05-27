@@ -399,7 +399,7 @@ public class GameManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(logFilePath))
         {
-            logFilePath = Path.Combine(@"C:\Users\User\Documents\Academic\CP3408_A2\cp3408_protoytpe_10", "FallenStarDebugLog.txt");
+            logFilePath = Path.Combine(Application.dataPath, "FallenStarDebugLog.txt");
 
             //// Clear the log file if it already exists
             //if (File.Exists(logFilePath))
