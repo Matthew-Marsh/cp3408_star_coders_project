@@ -127,7 +127,7 @@ MonoBehaviour:
   displayName: Blade of Abyss
   icon: {fileID: 21300000, guid: 9d88cfe62458b834f9fd0b2fc20042d4, type: 3}
   minDamage: 5
-  maxDamage: 10
+  maxDamage: 12
 --- !u!114 &4352517438645093658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coolDownDuration: 2
+  coolDownDuration: 1

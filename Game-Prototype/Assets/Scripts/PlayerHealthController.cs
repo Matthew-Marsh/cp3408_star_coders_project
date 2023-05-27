@@ -7,6 +7,7 @@ public class PlayerHealthController : MonoBehaviour
 {
     public float health;
     public float maxHealth;
+    public float healthRegeneration = 1f;
     private Image healthBar;
     Canvas gamePlayUI;
 
@@ -26,7 +27,7 @@ public class PlayerHealthController : MonoBehaviour
     // Update health bar
     void Update()
     {
-        Debug.Log("Health / MaxHealth: " +  health + " / " + maxHealth);
+        //Debug.Log("Health / MaxHealth: " +  health + " / " + maxHealth);
         
         // Check Health Bar before updating - incase UI GamePlay were deactivated
         if (healthBar == null)
@@ -36,7 +37,10 @@ public class PlayerHealthController : MonoBehaviour
             gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
             healthBar = healthBarTransform.GetComponentInChildren<Image>(true);
         }
-        Debug.Log(healthBar.ToString());
+        //Debug.Log(healthBar.ToString());
+        
+        // Health regeneration over time 
+        health += healthRegeneration * Time.deltaTime;
 
         // Fills the players health bar based on how much health is remaining
         healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);

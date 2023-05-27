@@ -126,8 +126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Magma Sword
   icon: {fileID: 21300000, guid: f171887fcfe56cf49b0b70acbcefdc88, type: 3}
-  minDamage: 18
-  maxDamage: 20
+  minDamage: 20
+  maxDamage: 25
 --- !u!114 &-8908453832143138629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coolDownDuration: 2
+  coolDownDuration: 1
