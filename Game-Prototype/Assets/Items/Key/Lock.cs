@@ -16,7 +16,7 @@ public class Lock : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Lock"))
+        if (other.CompareTag("Player"))
         {
             if (gameManager.UseKey())
             {

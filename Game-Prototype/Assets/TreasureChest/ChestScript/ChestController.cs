@@ -24,7 +24,6 @@ public class ChestController : MonoBehaviour
     {
         spawnTimer = spawnDuration;
         audioSource = GetComponent<AudioSource>();
-        //chestAnimator = GetComponent<Animator>();
     }
 
 
@@ -86,7 +85,10 @@ public class ChestController : MonoBehaviour
             }
             spawnTimer = spawnDuration;
             isTrapAudioPlaying = false;
-            Destroy(gameObject);
+            if (isLootClaimed)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -126,7 +128,6 @@ public class ChestController : MonoBehaviour
     {
         isLootClaimed = true;
         claimedLoot.SetActive(false);
-        //DestroyGameObject(claimedLoot);
     }
 
     private void PlayAudioClip(AudioClip clip)

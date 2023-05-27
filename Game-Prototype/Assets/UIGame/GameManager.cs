@@ -87,6 +87,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("Start Game Called.");
 
         // Click menu item and load scene
+        if (gameManagerAudioSource == null)
+        {
+            Debug.Log("One or more audio source/manager were null.");
+            gameManagerAudioSource = GetComponent<AudioSource>();
+            gameManagerAudioSource.mute = false;
+        }
         PlayAudioClip(selectButtonAudioClip, false);
 
         // Load and wait for scene load
