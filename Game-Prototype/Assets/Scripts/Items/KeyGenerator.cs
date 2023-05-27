@@ -3,8 +3,8 @@ using UnityEngine;
 public class KeyGenerator : MonoBehaviour
 {
     public GameObject dropObject;
-    public float dropChance = 0.1f;
-    public float dropDelay = 20.0f;
+    public float dropChance = 0.5f;
+    public float dropDelay = 10.0f;
     private bool hasDropped = false;
 
     private void Start()

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,7 +45,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Get Game Manager Audio source
-        gameManagerAudioSource = this.GetComponent<AudioSource>();
+        gameManagerAudioSource = GetComponent<AudioSource>();
 
         // Find active scene and its name
         currentScene = SceneManager.GetActiveScene();
@@ -53,13 +54,13 @@ public class GameManager : MonoBehaviour
         // Determine intial actions based on scene name
         if (currentSceneName == "StartMenu")
         {
-            Debug.Log("Start Menu");
+            Debug.Log("Start Menu Awake");
             PlayAudioClip(GetRandomAudioClip(startMenuAudioClips), true);
         }
         // Start scene sets all relevant GUI
         if (currentSceneName == "StartScene")
         {
-            Debug.Log("Start Scene");
+            Debug.Log("Start Scene Awake");
             InitialiseUI();
             activateUI("gamePlayUI");
         }
@@ -83,6 +84,8 @@ public class GameManager : MonoBehaviour
     // Start game
     public void StartGame()
     {
+        Debug.Log("Start Game Called.");
+
         // Click menu item and load scene
         PlayAudioClip(selectButtonAudioClip, false);
 
@@ -94,15 +97,17 @@ public class GameManager : MonoBehaviour
     // After scene has loaded execute remaining code
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Scene Loaded.");
         InitialiseUI();
         activateUI("gamePlayUI");
 
         // Find audio
         worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+        gameManagerAudioSource = GetComponent<AudioSource>();
     }
 
-        // Increment level
-        public void incrementLevel()
+    // Increment level
+    public void incrementLevel()
     {
         levelNumber++;
     }
@@ -149,9 +154,18 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         Debug.Log("Game Paused");
-        PlayAudioClip(selectButtonAudioClip, false);
-        Time.timeScale = 0f;
         activateUI("pauseMenuUI");
+
+        Time.timeScale = 0f;  // Freeze time
+
+        // Play click audio and set audio state to in menu
+        if (worldMusicPlayer == null || gameManagerAudioSource == null)
+        {
+            Debug.Log("One or more audio source/manager were null.");
+            worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+            gameManagerAudioSource = GetComponent<AudioSource>();
+        }
+        PlayAudioClip(selectButtonAudioClip, false);
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.InMenu);
     }
 
@@ -159,10 +173,18 @@ public class GameManager : MonoBehaviour
     public void ResumeGame()
     {
         Debug.Log("Game Resumed");
+        if (worldMusicPlayer == null || gameManagerAudioSource == null)
+        {
+            Debug.Log("One or more audio source/manager were null.");
+            worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+            gameManagerAudioSource = GetComponent<AudioSource>();
+        }
         PlayAudioClip(selectButtonAudioClip, false);
-        Time.timeScale = 1f;
-        activateUI("gamePlayUI");
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.Idle);
+        
+        activateUI("gamePlayUI");
+        Time.timeScale = 1f;
+
     }
 
     // Reset Level Counter
@@ -213,6 +235,9 @@ public class GameManager : MonoBehaviour
     // Play audio clip, nominate looping or not
     private void PlayAudioClip(AudioClip clip, bool loopCondition)
     {
+        Debug.Log("Audio check.");
+        Debug.Log("Clip: " + clip.ToString());
+        Debug.Log("Game manager audio source: " + gameManagerAudioSource.ToString());
         gameManagerAudioSource.loop = loopCondition;
 
         if (clip == null)
@@ -230,10 +255,19 @@ public class GameManager : MonoBehaviour
 
         if (currentSceneName == "StartScene")
         {
-            gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
-            endLevelUI = GameObject.Find("UIEndLevelMenu").GetComponent<Canvas>();
-            pauseMenuUI = GameObject.Find("UIPauseMenu").GetComponent<Canvas>();
-            deathMenuUI = GameObject.Find("UIDeathMenu").GetComponent<Canvas>();
+            //gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
+            //endLevelUI = GameObject.Find("UIEndLevelMenu").GetComponent<Canvas>();
+            //pauseMenuUI = GameObject.Find("UIPauseMenu").GetComponent<Canvas>();
+            //deathMenuUI = GameObject.Find("UIDeathMenu").GetComponent<Canvas>();
+
+            gamePlayUI = Resources.FindObjectsOfTypeAll<Canvas>()
+                .FirstOrDefault(canvas => canvas.name == "UIGamePlay");
+            endLevelUI = Resources.FindObjectsOfTypeAll<Canvas>()
+                .FirstOrDefault(canvas => canvas.name == "UIEndLevelMenu");
+            pauseMenuUI = Resources.FindObjectsOfTypeAll<Canvas>()
+                .FirstOrDefault(canvas => canvas.name == "UIPauseMenu");
+            deathMenuUI = Resources.FindObjectsOfTypeAll<Canvas>()
+                .FirstOrDefault(canvas => canvas.name == "UIDeathMenu");
 
             // Debug for each instance
             Debug.Log("GameManager instance created.");
@@ -246,6 +280,19 @@ public class GameManager : MonoBehaviour
 
     private void activateUI(string selectedUI)
     {
+        if (gamePlayUI == null || endLevelUI == null || pauseMenuUI == null || deathMenuUI == null)
+        {
+            Debug.Log("One or more UI were null.");
+            InitialiseUI();
+        }
+
+        // Debug which is UI is found
+        Debug.Log("Current UI Components that are found.");
+        Debug.Log("GamePlayUI found: " + (gamePlayUI != null));
+        Debug.Log("EndLevelUI found: " + (endLevelUI != null));
+        Debug.Log("PauseMenuUI found: " + (pauseMenuUI != null));
+        Debug.Log("DeathMenuUI found: " + (deathMenuUI != null));
+
         // Reset UI
         gamePlayUI.gameObject.SetActive(false);
         endLevelUI.gameObject.SetActive(false);
