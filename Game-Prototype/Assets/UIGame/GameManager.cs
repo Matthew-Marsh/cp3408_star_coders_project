@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
             InitialiseUI();
             activateUI("gamePlayUI");
         }
-
     }
 
     // On start menu if Play is selected continue saved from save
@@ -111,9 +110,9 @@ public class GameManager : MonoBehaviour
     // Display level complete UI
     public void DisplayLevelComplete()
     {
-        Debug.Log("Handle Level Success");
-        incrementLevel();
         activateUI("endLevelUI");
+        incrementLevel();
+        Debug.Log("Level Successfully Complete! Level Number: " + levelNumber);
     }
 
     // Select next level button from End Level UI
@@ -139,6 +138,7 @@ public class GameManager : MonoBehaviour
     // Save level and keys, then exit game
     public void ExitGame()
     {
+        Debug.Log("Exit Game");
         PlayAudioClip(selectButtonAudioClip, false);
         PlayerPrefs.SetInt("LevelNumber", levelNumber);
         PlayerPrefs.SetInt("NumberOfKeys", numberOfKeys);
@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
     // Open pause menu and pause game
     public void PauseGame()
     {
+        Debug.Log("Game Paused");
         PlayAudioClip(selectButtonAudioClip, false);
         Time.timeScale = 0f;
         activateUI("pauseMenuUI");
@@ -157,6 +158,7 @@ public class GameManager : MonoBehaviour
     // Resume game from pause menu
     public void ResumeGame()
     {
+        Debug.Log("Game Resumed");
         PlayAudioClip(selectButtonAudioClip, false);
         Time.timeScale = 1f;
         activateUI("gamePlayUI");
