@@ -2336,9 +2336,9 @@ MonoBehaviour:
   player: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
   onCoolDown: 0
   playerInRange: 0
-  currentHealth: 50
-  maxHealth: 50
-  attackTimer: 1
+  currentHealth: 40
+  maxHealth: 40
+  attackTimer: 5
   attackRange: 2
   attackDamage: 2
   walkLimits: {x: 30, y: 30, z: 30}

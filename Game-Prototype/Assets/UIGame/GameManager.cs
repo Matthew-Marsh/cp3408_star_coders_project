@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     private Scene currentScene;
     private string currentSceneName;
+    private string logFilePath;
 
     private void Awake()
     {
@@ -64,6 +66,11 @@ public class GameManager : MonoBehaviour
             InitialiseUI();
             activateUI("gamePlayUI");
         }
+    }
+
+    private void Start()
+    {
+        logFilePath = Path.Combine(Application.persistentDataPath, "FallenStarDebugLog.txt");
     }
 
     // On start menu if Play is selected continue saved from save
@@ -172,6 +179,7 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         Debug.Log("Game Paused");
+        LogMessage("Active Camera: " + Camera.main.name);
         activateUI("pauseMenuUI");
 
         Time.timeScale = 0f;  // Freeze time
@@ -334,6 +342,14 @@ public class GameManager : MonoBehaviour
             default:
                 gamePlayUI.gameObject.SetActive(true);
                 break;
+        }
+    }
+
+    private void LogMessage(string message)
+    {
+        using (StreamWriter writer = File.AppendText(logFilePath))
+        {
+            writer.WriteLine(message);
         }
     }
 }
