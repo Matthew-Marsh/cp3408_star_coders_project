@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
         // Find audio
         worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
         gameManagerAudioSource = GetComponent<AudioSource>();
+        gameManagerAudioSource.mute = true;
     }
 
     // Increment level
@@ -123,6 +124,7 @@ public class GameManager : MonoBehaviour
     // Select next level button from End Level UI
     public void LoadNextLevel()
     {
+        Debug.Log("Load Next Level.");
         StartGame();
     }
 
@@ -144,6 +146,7 @@ public class GameManager : MonoBehaviour
         AudioSource worldMusicAudioSource = worldMusicPlayer.GetComponent<AudioSource>();
         worldMusicAudioSource.mute = true;
 
+        gameManagerAudioSource.mute = false;
         PlayAudioClip(onDeathAudioClip, false);
         levelNumber = 0;
         activateUI("deathMenuUI");
@@ -153,6 +156,7 @@ public class GameManager : MonoBehaviour
     public void ExitGame()
     {
         Debug.Log("Exit Game");
+        gameManagerAudioSource.mute = false;
         PlayAudioClip(selectButtonAudioClip, false);
         PlayerPrefs.SetInt("LevelNumber", levelNumber);
         PlayerPrefs.SetInt("NumberOfKeys", numberOfKeys);
@@ -174,6 +178,7 @@ public class GameManager : MonoBehaviour
             worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
             gameManagerAudioSource = GetComponent<AudioSource>();
         }
+        gameManagerAudioSource.mute = false;
         PlayAudioClip(selectButtonAudioClip, false);
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.InMenu);
     }
@@ -189,6 +194,7 @@ public class GameManager : MonoBehaviour
             gameManagerAudioSource = GetComponent<AudioSource>();
         }
         PlayAudioClip(selectButtonAudioClip, false);
+        gameManagerAudioSource.mute = true;
         worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.Idle);
         
         activateUI("gamePlayUI");
@@ -264,11 +270,6 @@ public class GameManager : MonoBehaviour
 
         if (currentSceneName == "StartScene")
         {
-            //gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
-            //endLevelUI = GameObject.Find("UIEndLevelMenu").GetComponent<Canvas>();
-            //pauseMenuUI = GameObject.Find("UIPauseMenu").GetComponent<Canvas>();
-            //deathMenuUI = GameObject.Find("UIDeathMenu").GetComponent<Canvas>();
-
             gamePlayUI = Resources.FindObjectsOfTypeAll<Canvas>()
                 .FirstOrDefault(canvas => canvas.name == "UIGamePlay");
             endLevelUI = Resources.FindObjectsOfTypeAll<Canvas>()

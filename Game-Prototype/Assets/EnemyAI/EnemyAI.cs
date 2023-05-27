@@ -17,6 +17,7 @@ public class EnemyAI : MonoBehaviour
     public bool playerInRange = false;
     private SphereCollider rangeCollider;
     private PlayerHealthController playerHealth;
+    private KeyGenerator keyGenerator;
 
     [Header("Combat Settings")]
     public int currentHealth = 100;
@@ -45,6 +46,9 @@ public class EnemyAI : MonoBehaviour
         // Audio
         enemyMusicPlayer = FindObjectOfType<EnemyMusicPlayer>();
         Debug.Log("Audio Enemy Player: " + enemyMusicPlayer.ToString());
+
+        // Key generation
+        keyGenerator = GetComponent<KeyGenerator>();
 
         // Game Manager for level number increase attack damager each level e.g. Level 2 attack x 1.2
         gameManager = FindObjectOfType<GameManager>();
@@ -276,7 +280,6 @@ public class EnemyAI : MonoBehaviour
         {
             if (raycastInfo.transform.gameObject.tag == "Player")
             {
-                enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Alert);
                 return true;
             }
         }
@@ -306,6 +309,8 @@ public class EnemyAI : MonoBehaviour
         {
             currentHealth -= damage;
             enemyAnimator.SetTrigger("isHurt");
+            keyGenerator.CheckDrop();
+            enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Alert);
         }
     }
 

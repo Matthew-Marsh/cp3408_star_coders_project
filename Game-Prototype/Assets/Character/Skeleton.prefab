@@ -2494,8 +2494,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 73f75434beded40448638d8bc70ba0d2, type: 3}
   - {fileID: 8300000, guid: f16dc0fbd545dfa4baed4d4cc49251b2, type: 3}
   AlertClips:
-  - {fileID: 8300000, guid: f607f649de9166e46b76be5de6cf16b7, type: 3}
-  - {fileID: 8300000, guid: ea74277b6fa7e614686a38879ef974dd, type: 3}
+  - {fileID: 8300000, guid: 05d0536a3eefc80438f95f9662331f52, type: 3}
+  - {fileID: 8300000, guid: 2ee71cfc2c8d7334abb8ad72203c0068, type: 3}
+  - {fileID: 8300000, guid: 2b202aff8c946d745a2ab81e2cd60819, type: 3}
+  - {fileID: 8300000, guid: e4b15ccc6c1d8aa44be86a9f01a22c0f, type: 3}
+  - {fileID: 8300000, guid: 5672cb5df4b75c3479ad96959813e311, type: 3}
+  - {fileID: 8300000, guid: 79577ba19ce26b14091cadef83842225, type: 3}
+  - {fileID: 8300000, guid: 471cc7b80fcd51e4a9055d009dbed822, type: 3}
+  - {fileID: 8300000, guid: 3da1bf3e1e846084b90f743508ad7324, type: 3}
+  - {fileID: 8300000, guid: 7d9c67a3f6e2ebd4fa1cfa6f0e5c2d1b, type: 3}
+  - {fileID: 8300000, guid: b632ae8aac24f7441976016a846e559b, type: 3}
+  - {fileID: 8300000, guid: 373bf7a0b81fa3140b2271b4eb858d3d, type: 3}
 --- !u!114 &8151645435431585097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2509,8 +2518,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropObject: {fileID: 374289202576707483, guid: 78df1db2fbc8ec64f949fac0c05bf693, type: 3}
-  dropChance: 0.3
-  dropDelay: 60
+  bonusDropObject: {fileID: 1000013846074356, guid: 11e31a2ebb4e6e246bcf8c0ba034a031, type: 3}
+  dropChance: 0.25
+  bonusDropChance: 0.1
 --- !u!1 &1813734462565108
 GameObject:
   m_ObjectHideFlags: 0

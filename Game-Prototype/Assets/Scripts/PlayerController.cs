@@ -325,6 +325,12 @@ public class PlayerController : MonoBehaviour
             if (collider.CompareTag("Key"))
             {
                 gameManager.IncrementKeys();
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                lootItem.SetClaimed();
+                PlayAudioClip(inventoryPickUpAudio, playerAudioSource);
+                Destroy(lootItem.gameObject);
+                inventory.numberOfKeysText.text = gameManager.GetNumberOfKeys().ToString();
+                Debug.Log("Key picked up.");
             }
 
             if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
