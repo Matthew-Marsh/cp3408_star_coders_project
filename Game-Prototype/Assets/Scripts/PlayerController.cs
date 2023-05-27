@@ -111,12 +111,66 @@ public class PlayerController : MonoBehaviour
                 Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
+
+            if (Input.GetKey(KeyCode.W))
+            {
                 if (isSprinting)
                     anim.SetTrigger("isRunFwd");
                 else
                     anim.SetTrigger("isWalkFwd");
+            }
+            else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
+            }
+            else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBack");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBck");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBck");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunLeft");
+                else
+                    anim.SetTrigger("isWalkLeft");
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunRight");
+                else
+                    anim.SetTrigger("isWalkRight");
+            }
 
-                transform.position += movement * speed * Time.deltaTime;
+
+            transform.position += movement * speed * Time.deltaTime;
             }
             else
             {
