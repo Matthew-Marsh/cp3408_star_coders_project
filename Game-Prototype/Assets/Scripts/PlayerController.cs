@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -44,7 +43,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Audio: " + playerAudioSource.ToString());
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         inventory = FindObjectOfType<InventorySystem>();
@@ -104,14 +102,14 @@ public class PlayerController : MonoBehaviour
                 isSprinting = false;
             }
 
-            //if (CanMove(movement))  // Stops going through objects/walls
+            //if (CanMove(movement))  // Stops going through objects/walls - Testing purposes only
             //{
                 movement.y = 0f;
                 movement.Normalize();
                 Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
-
+            // Determine which animation to use
             if (Input.GetKey(KeyCode.W))
             {
                 if (isSprinting)
@@ -215,7 +213,6 @@ public class PlayerController : MonoBehaviour
         isWeaponAvailable = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isAlive == true)
@@ -224,9 +221,7 @@ public class PlayerController : MonoBehaviour
             AttackControl();
 
             // this code controls the player character following the mouse position
-            
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            //Debug.Log(cameraRay.ToString());
             Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
@@ -296,6 +291,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Check if the raycast hits a collider e.g. objects, walls, enemies
+    // Was required for initial testing
     bool CanMove(Vector3 movement)
     {
         float rayDistance = speed * Time.deltaTime;
