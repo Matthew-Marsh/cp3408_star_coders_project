@@ -28,7 +28,7 @@ public class MeleeCollision : MonoBehaviour
                 if (equippedWeapon != null)
                 {
                     int damage = equippedWeapon.GenereateDamage();
-                    Debug.Log("Damage: " + damage);
+                    Debug.Log("Player Does Damage: " + damage);
                     enemy.GetComponent<EnemyAI>().TakeDamage(damage);
                 }
             }

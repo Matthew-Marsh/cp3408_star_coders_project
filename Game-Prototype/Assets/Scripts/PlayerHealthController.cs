@@ -9,32 +9,45 @@ public class PlayerHealthController : MonoBehaviour
     public float maxHealth;
     private Image healthBar;
     Canvas gamePlayUI;
-    // Start is called before the first frame update
+
     void Start()
     {
         maxHealth = health;
+        
+        // Find health bar in Game Play UI
         gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
-
+        Transform healthBarTransform = gamePlayUI.transform.Find("HealthBar");
         if (healthBar == null)
         {
-
-            healthBar = gamePlayUI.GetComponentInChildren<Image>();
+            healthBar = healthBarTransform.GetComponentInChildren<Image>(true);
         }
-        
     }
 
-    // Update is called once per frame
+    // Update health bar
     void Update()
     {
+        Debug.Log("Health / MaxHealth: " +  health + " / " + maxHealth);
+        
+        // Check Health Bar before updating - incase UI GamePlay were deactivated
+        if (healthBar == null)
+        {
+            Debug.Log("Health Bar Image Not Found");
+            Transform healthBarTransform = gamePlayUI.transform.Find("HealthBar");
+            gamePlayUI = GameObject.Find("UIGamePlay").GetComponent<Canvas>();
+            healthBar = healthBarTransform.GetComponentInChildren<Image>(true);
+        }
+        Debug.Log(healthBar.ToString());
+
         // Fills the players health bar based on how much health is remaining
         healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);
     }
 
+    // Handle on Death
     void Death()
     {
         if (health <= 0)
         {
-            // end game code
+            health = 0; // Death UI handled in Player Controller
         }
     }
 
