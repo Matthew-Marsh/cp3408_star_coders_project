@@ -27,9 +27,8 @@ public class CameraFollowPlayer : MonoBehaviour
             if (playerObject != null)
             {
                 followPlayer = playerObject.transform;
-                cameraTransform.position = followPlayer.position + playerOffset;
+                cameraTransform.position = followPlayer.position + playerOffset; // moves camera based on offset
             }
-            // moves camera based on offset
             else
             {
                 cameraTransform = transform;
@@ -37,7 +36,6 @@ public class CameraFollowPlayer : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         Debug.Log("Camera Set to Position Start");
@@ -53,7 +51,6 @@ public class CameraFollowPlayer : MonoBehaviour
         {
             cameraTransform = transform;
         }
-
     }
 
     public void SetTarget(Transform newTransformTarget)
@@ -65,7 +62,7 @@ public class CameraFollowPlayer : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
-
+        // This is required to make the game build in the correct order
         if (!isInitialised)
         {
             playerObject = GameObject.FindGameObjectWithTag("Player");

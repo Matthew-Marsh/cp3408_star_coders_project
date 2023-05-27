@@ -18,6 +18,7 @@ public class EnemyAI : MonoBehaviour
     private SphereCollider rangeCollider;
     private PlayerHealthController playerHealth;
     private KeyGenerator keyGenerator;
+    PlayerMusicPlayer playerMusicPlayer;
 
     [Header("Combat Settings")]
     public int currentHealth = 100;
@@ -46,6 +47,7 @@ public class EnemyAI : MonoBehaviour
         // Audio
         enemyMusicPlayer = FindObjectOfType<EnemyMusicPlayer>();
         Debug.Log("Audio Enemy Player: " + enemyMusicPlayer.ToString());
+        playerMusicPlayer = FindObjectOfType<PlayerMusicPlayer>();
 
         // Key generation
         keyGenerator = GetComponent<KeyGenerator>();
@@ -178,6 +180,8 @@ public class EnemyAI : MonoBehaviour
                 if (player != null && playerHealth.health > 0)
                 {
                     playerHealth.health -= attackDamage;
+                    playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Hurt);
+
                     if (playerHealth.health < 0)
                     {
                         playerHealth.health = 0;

@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     GameManager gameManager;
-    
+
     [Header("Player Control")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -30,9 +30,11 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     bool isSprinting;
     bool isAlive = true;
-   
+    public bool isMoving;
+
     PlayerHealthController health;
     GameObject weapon;
+    PlayerMusicPlayer playerMusicPlayer;
 
     private void Awake()
     {
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
         playerAudioSource = GetComponent<AudioSource>();
         Debug.Log("Audio: " + worldMusicPlayer.ToString());
         Debug.Log("Audio: " + playerAudioSource.ToString());
+        playerMusicPlayer = FindObjectOfType<PlayerMusicPlayer>();
     }
 
     void Start()
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
-        bool isMoving = false;
+        isMoving = false;
         Vector3 movement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.A))
@@ -104,10 +107,10 @@ public class PlayerController : MonoBehaviour
 
             //if (CanMove(movement))  // Stops going through objects/walls - Testing purposes only
             //{
-                movement.y = 0f;
-                movement.Normalize();
-                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+            movement.y = 0f;
+            movement.Normalize();
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
             // Determine which animation to use
             if (Input.GetKey(KeyCode.W))
@@ -167,13 +170,15 @@ public class PlayerController : MonoBehaviour
                     anim.SetTrigger("isWalkRight");
             }
 
-
+            //playerMusicPlayer.GetComponent<AudioSource>().mute = true;
             transform.position += movement * speed * Time.deltaTime;
-            }
-            else
-            {
-                anim.SetTrigger("isIdle");
-            }
+        }
+        else
+        {
+            anim.SetTrigger("isIdle");
+            //playerMusicPlayer.GetComponent<AudioSource>().mute = false;
+            playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Idle);
+        }
         //}
     }
 
@@ -200,6 +205,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             anim.Play("MeeleeAttack_TwoHanded");
+            playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Attacking);
             Invoke("EnableWeaponBoxCollider", 1);
             Invoke("DisableWeaponBoxCollider", 2); // Disables cooldown to prevent players walking into enemys to cause damage
             StartCoroutine(StartCooldown());
@@ -326,14 +332,18 @@ public class PlayerController : MonoBehaviour
             {
                 gameManager.IncrementKeys();
                 LootItem lootItem = collider.GetComponent<LootItem>();
-                lootItem.SetClaimed();
                 PlayAudioClip(inventoryPickUpAudio, playerAudioSource);
                 Destroy(lootItem.gameObject);
                 inventory.numberOfKeysText.text = gameManager.GetNumberOfKeys().ToString();
                 Debug.Log("Key picked up.");
             }
-
-            if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
+            else if (collider.CompareTag("HealthDrop"))
+            {
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                health.AddHealth(10);
+                Destroy(lootItem.gameObject);
+            }
+            else if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
             {
                 LootItem lootItem = collider.GetComponent<LootItem>();
                 if (lootItem != null && !lootItem.IsClaimed())

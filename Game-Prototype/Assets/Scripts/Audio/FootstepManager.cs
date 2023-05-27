@@ -62,6 +62,7 @@ public class FootstepManager : MonoBehaviour
 
         if (hit.transform.tag == "Stone")
         {
+            Debug.Log("Play foostep");
             surface = Surface.stone;
         }
 

@@ -2376,13 +2376,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.289
+  m_Volume: 0.177
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 158
+  Priority: 208
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 10
@@ -2518,7 +2518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropObject: {fileID: 374289202576707483, guid: 78df1db2fbc8ec64f949fac0c05bf693, type: 3}
-  bonusDropObject: {fileID: 1000013846074356, guid: 11e31a2ebb4e6e246bcf8c0ba034a031, type: 3}
+  bonusDropObject: {fileID: 1000013846074356, guid: cf5713ea55ad24547a3de1a474f2e938, type: 3}
   dropChance: 0.25
   bonusDropChance: 0.1
 --- !u!1 &1813734462565108
