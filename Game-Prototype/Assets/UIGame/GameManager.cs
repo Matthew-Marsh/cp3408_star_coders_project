@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         logFilePath = Path.Combine(Application.persistentDataPath, "FallenStarDebugLog.txt");
+        // Clear the log file if it already exists
+        if (File.Exists(logFilePath))
+            File.Delete(logFilePath);
     }
 
     // On start menu if Play is selected continue saved from save
