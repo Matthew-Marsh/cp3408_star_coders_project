@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNumber: 1
   spawnTimer: 30
-  numberEnemiesToSpawn: 4
+  numberEnemiesToSpawn: 3
   detectionRange: 5
   numberExistingEnemies: 0
   enemyBasic: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}

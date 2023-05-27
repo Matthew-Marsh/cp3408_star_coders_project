@@ -135,6 +135,15 @@ public class GameManager : MonoBehaviour
     // Display Death Menu UI on player death
     public void GameOver()
     {
+        if (worldMusicPlayer == null)
+        {
+            Debug.Log("One or more audio source/manager were null.");
+            worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+        }
+        // Mute world music
+        AudioSource worldMusicAudioSource = worldMusicPlayer.GetComponent<AudioSource>();
+        worldMusicAudioSource.mute = true;
+
         PlayAudioClip(onDeathAudioClip, false);
         levelNumber = 0;
         activateUI("deathMenuUI");
