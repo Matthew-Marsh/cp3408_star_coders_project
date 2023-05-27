@@ -38,9 +38,12 @@ public class PlayerHealthController : MonoBehaviour
             healthBar = healthBarTransform.GetComponentInChildren<Image>(true);
         }
         //Debug.Log(healthBar.ToString());
-        
+
         // Health regeneration over time 
-        health += healthRegeneration * Time.deltaTime;
+        if (health != 0)
+        {
+            health += healthRegeneration * Time.deltaTime;
+        }
 
         // Fills the players health bar based on how much health is remaining
         healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);
@@ -51,7 +54,7 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (health <= 0)
         {
-            health = 0; // Death UI handled in Player Controller
+           // Death UI handled in Player Controller
         }
     }
 
