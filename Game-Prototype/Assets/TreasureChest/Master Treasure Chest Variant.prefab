@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5986783301622944559
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 417174686, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 725525958, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010498622980, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_Name
+      value: Master Treasure Chest Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.39012003
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.39012003
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9214926
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.0594296
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010279467350, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65000013765776956, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509452881813948002, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509452881813948003, guid: fac60f777116d6c42905b09352422e54, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fac60f777116d6c42905b09352422e54, type: 3}

@@ -1,27 +1,63 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gameManager;
+    
+    [Header("Player Control")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
+    public bool isWeaponAvailable = true;
+    public float coolDownDuration = 2.0f;
+    public float floorAdjustmentYAxis = 0f;
+    public float turnSpeed = 0.9f;
     float speed;
+
+    [Header("Audio")]
+    public AudioClip inventoryPickUpAudio;
+    public AudioClip consumableAudioClip;
+    public AudioClip weaponAudioClip;
+    private AudioSource playerAudioSource;
+    WorldMusicPlayer worldMusicPlayer;
+
+    [Header("Invetory")]
+    public float interactRange = 5f;
+    private InventorySystem inventory;
+
     private Rigidbody rb;
     private Camera mainCamera;
     Animator anim;
     bool isSprinting;
-    GameObject weapon;
-    public bool isWeaponAvailable = true;
-    public float coolDownDuration = 2.0f;
-    PlayerHealthController health;
     bool isAlive = true;
+   
+    PlayerHealthController health;
+    GameObject weapon;
+
+    private void Awake()
+    {
+        gameManager = GameObject.FindAnyObjectByType<GameManager>();
+        worldMusicPlayer = FindObjectOfType<WorldMusicPlayer>();
+        playerAudioSource = GetComponent<AudioSource>();
+        Debug.Log("Audio: " + worldMusicPlayer.ToString());
+        Debug.Log("Audio: " + playerAudioSource.ToString());
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        inventory = FindObjectOfType<InventorySystem>();
+        worldMusicPlayer.SetWorldState(WorldMusicPlayer.WorldState.Idle);
+        Debug.Log("Inventory: " + inventory.ToString());
+
         weapon = GameObject.FindGameObjectWithTag("Weapon");
-        weapon.GetComponent<BoxCollider>().enabled = false;
+
+        Debug.Log("Weapon object: " + weapon.ToString());
+
+        if (weapon != null)
+            weapon.GetComponent<BoxCollider>().enabled = false;
+
         rb = GetComponent<Rigidbody>();
         mainCamera = FindObjectOfType<Camera>();
         anim = this.GetComponent<Animator>();
@@ -30,85 +66,63 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
-        if (Input.GetKey("left shift"))
+        bool isMoving = false;
+        Vector3 movement = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.A))
         {
-            speed = sprintSpeed;
-            isSprinting = true;
+            movement -= mainCamera.transform.right;
+            isMoving = true;
         }
-        else
+        else if (Input.GetKey(KeyCode.D))
         {
-            speed = walkSpeed;
-            isSprinting = false;
+            movement += mainCamera.transform.right;
+            isMoving = true;
         }
 
-        if (Input.GetKey("w") && Input.GetKey("a"))
+        if (Input.GetKey(KeyCode.W))
         {
-            if (isSprinting)
-                anim.SetTrigger("isRunLeft");
+            movement += mainCamera.transform.forward;
+            isMoving = true;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            movement -= mainCamera.transform.forward;
+            isMoving = true;
+        }
+
+        if (isMoving)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                speed = sprintSpeed;
+                isSprinting = true;
+            }
             else
-                anim.SetTrigger("isWalkLeft");
-            transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("w") && Input.GetKey("d"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunRight");
+            {
+                speed = walkSpeed;
+                isSprinting = false;
+            }
+
+            //if (CanMove(movement))  // Stops going through objects/walls
+            //{
+                movement.y = 0f;
+                movement.Normalize();
+                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
+
+                transform.position += movement * speed * Time.deltaTime;
+            }
             else
-                anim.SetTrigger("isWalkRight");
-            transform.position += (Vector3.forward * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("s") && Input.GetKey("a"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.left * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("s") && Input.GetKey("d"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += (Vector3.back * speed * Time.deltaTime) + (Vector3.right * speed * Time.deltaTime);
-        }
-        else if (Input.GetKey("d"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
-            else
-                anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.right * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey("a"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
-            else
-                anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.left * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey("w"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunFwd");
-            else
-                anim.SetTrigger("isWalkFwd");
-            transform.position += Vector3.forward * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey("s"))
-        {
-            if (isSprinting)
-                anim.SetTrigger("isRunBck");
-            else
-                anim.SetTrigger("isWalkBck");
-            transform.position += Vector3.back * speed * Time.deltaTime;
-        }
-        else
-        {
-            anim.SetTrigger("isIdle");
-        }
+            {
+                anim.SetTrigger("isIdle");
+            }
+        //}
     }
 
     // Disables the box collider on the players weapon
@@ -138,7 +152,6 @@ public class PlayerController : MonoBehaviour
             Invoke("DisableWeaponBoxCollider", 2); // Disables cooldown to prevent players walking into enemys to cause damage
             StartCoroutine(StartCooldown());
         }
-
     }
 
     public IEnumerator StartCooldown()
@@ -151,22 +164,72 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isAlive == true)
+        if (isAlive == true)
         {
             MovementControl();
             AttackControl();
 
             // this code controls the player character following the mouse position
+            
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            //Debug.Log(cameraRay.ToString());
+            Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
-            if(groundPlane.Raycast(cameraRay, out rayLength))
+            if (groundPlane.Raycast(cameraRay, out rayLength))
             {
                 Vector3 pointToLook = cameraRay.GetPoint(rayLength);
                 Debug.DrawLine(cameraRay.origin, pointToLook, Color.blue);
 
-                transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+                Vector3 lookDirection = pointToLook - transform.position;
+                lookDirection.y = 0f;
+
+                // Clamping prevents the player from tipping over, can add x clamp is side-to-side becomes issue
+                float clampedYRotation = Mathf.Clamp(lookDirection.y, -45f, 45f);
+                lookDirection.y = clampedYRotation;
+
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 360f * Time.deltaTime);
+            }
+
+            // Pick up loot
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                TryPickUpLoot();
+            }
+
+            // Go back an inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                inventory.ChangeItem(false);
+                Debug.Log("Change Item Back.");
+            }
+
+            // Use inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                InventoryItem currentItem = inventory.GetCurrentItem();
+                if (currentItem != null)
+                {
+                    if (currentItem.CompareTag("Weapon"))
+                    {
+                        PlayAudioClip(weaponAudioClip, playerAudioSource);
+                    }
+                    else if (currentItem.CompareTag("Loot"))
+                    {
+                        PlayAudioClip(consumableAudioClip, playerAudioSource);
+                    }
+                }
+                inventory.UseItem();
+                Debug.Log("Use Item.");
+
+            }
+
+            // Go forward an inventory item
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                inventory.ChangeItem(true);
+                Debug.Log("Change Item Forward.");
             }
         }
 
@@ -174,6 +237,60 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetTrigger("isDead");
             isAlive = false;
+            gameManager.GameOver();
+        }
+    }
+
+    // Check if the raycast hits a collider e.g. objects, walls, enemies
+    bool CanMove(Vector3 movement)
+    {
+        float rayDistance = speed * Time.deltaTime;
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, movement, out hit, rayDistance))
+        {
+            return !hit.collider;
+        }
+
+        return true;
+    }
+
+    // Play audio clip
+    private void PlayAudioClip(AudioClip clip, AudioSource audioSource)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.loop = false;
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
+
+    // Try to pick up loot
+    private void TryPickUpLoot()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Key"))
+            {
+                gameManager.IncrementKeys();
+            }
+
+            if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
+            {
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                if (lootItem != null && !lootItem.IsClaimed())
+                {
+                    lootItem.SetClaimed();
+                    PlayAudioClip(inventoryPickUpAudio, playerAudioSource);
+                    Debug.Log(lootItem.ToString() + " claimed.");
+
+                    inventory.AddToInventory(collider.gameObject);
+                    Debug.Log(collider.gameObject.ToString() + " picked up.");
+                    break;
+                }
+            }
         }
     }
 }

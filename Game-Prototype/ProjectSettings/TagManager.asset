@@ -7,6 +7,13 @@ TagManager:
   - Stone
   - Enemy
   - Weapon
+  - End
+  - Loot
+  - EquipHand
+  - PlayerTrigger
+  - EnemySpawner
+  - Key
+  - Lock
   layers:
   - Default
   - TransparentFX
