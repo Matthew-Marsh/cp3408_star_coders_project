@@ -7,15 +7,17 @@ public class CameraFollowPlayer : MonoBehaviour
 {
 
     public Transform followPlayer;
-    public Vector3 playerOffset;
-    public float MoveSpeed = 400f;
+    public Vector3 playerOffset = new Vector3(0f, 2f, -4f);
+    public float MoveSpeed = 100f;
     private Transform cameraTransform; // How much the camera gets offset from the player 
     GameObject playerObject;
     public float moveSpeed = 5f;
-    public float snapThreshold = 0.9f;
+    public float snapThreshold = 2f;
+    private bool isInitialised = false;
 
     private void Awake()
     {
+        Debug.Log("Camera Set to Position Awake");
         cameraTransform = transform;
 
         // Needs to be done in awake and on start due to character spawn
@@ -25,8 +27,8 @@ public class CameraFollowPlayer : MonoBehaviour
             if (playerObject != null)
             {
                 followPlayer = playerObject.transform;
+                cameraTransform.position = followPlayer.position + playerOffset; // moves camera based on offset
             }
-            // moves camera based on offset
             else
             {
                 cameraTransform = transform;
@@ -34,21 +36,21 @@ public class CameraFollowPlayer : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
+        Debug.Log("Camera Set to Position Start");
         // Needs to be done in awake and on start due to character spawn
         playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null)
         {
             followPlayer = playerObject.transform;
+            cameraTransform.position = followPlayer.position + playerOffset;
         }
         // moves camera based on offset
         else
         {
             cameraTransform = transform;
         }
-
     }
 
     public void SetTarget(Transform newTransformTarget)
@@ -60,12 +62,26 @@ public class CameraFollowPlayer : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
+        // This is required to make the game build in the correct order
+        if (!isInitialised)
+        {
+            playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+            {
+                followPlayer = playerObject.transform;
+                cameraTransform.position = followPlayer.position + playerOffset;
+            }
+            // moves camera based on offset
+            else
+            {
+                cameraTransform = transform;
+            }
+            isInitialised = true;
+        }
+
         // Makes camera follow the player 
         if (followPlayer != null)
         {
-            //cameraTransform.position = Vector3.Lerp(cameraTransform.position, followPlayer.position + playerOffset,
-            //                             MoveSpeed * Time.deltaTime);
-
             Vector3 targetPosition = followPlayer.position + followPlayer.forward * playerOffset.z + followPlayer.up * playerOffset.y;
             Quaternion targetRotation = Quaternion.LookRotation(followPlayer.forward, Vector3.up);
 
@@ -88,4 +104,6 @@ public class CameraFollowPlayer : MonoBehaviour
         }
 
     }
+
+  
 }

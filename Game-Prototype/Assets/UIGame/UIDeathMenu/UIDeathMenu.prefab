@@ -628,7 +628,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4587950674829326104, guid: c1ae4219e18a7e244ab0bb0c627330ab, type: 3}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: RestartLevel
         m_Mode: 1
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4587950674829326104, guid: c1ae4219e18a7e244ab0bb0c627330ab, type: 3}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -815,7 +815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 29.003, y: -7.251007}
+  m_AnchoredPosition: {x: 29.00293, y: -7.2509766}
   m_SizeDelta: {x: -804.82, y: -137.762}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1388249580762558390

@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06658aaf93533244ebe57d6f90329b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnTimer: 30
-  numberEnemiesToSpawn: 4
+  levelNumber: 1
+  spawnTimer: 10
+  numberEnemiesToSpawn: 2
   detectionRange: 10
   numberExistingEnemies: 0
   enemyBasic: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}
-  enemyAdvanced: {fileID: 1809680881062764, guid: 361b0749201fb1c439dc20ceaf29dd6b, type: 3}
+  enemyAdvanced: {fileID: 1809680881062764, guid: 4b69505fdd1b3fe4fb9aef1f35f78a70, type: 3}
   playerInRange: 0

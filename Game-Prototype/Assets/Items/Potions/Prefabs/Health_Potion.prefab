@@ -4975,7 +4975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Health Potion
   icon: {fileID: 21300000, guid: 41f6e3d5c40b77d4699e8893efa683be, type: 3}
-  healthRestoreAmount: 10
+  healthRestoreAmount: 50
 --- !u!114 &-2345880668922844821
 MonoBehaviour:
   m_ObjectHideFlags: 0

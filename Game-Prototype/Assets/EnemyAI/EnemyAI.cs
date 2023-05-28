@@ -7,6 +7,8 @@ public class EnemyAI : MonoBehaviour
     public Animator enemyAnimator;
 
     EnemyMusicPlayer enemyMusicPlayer;
+    private GameManager gameManager;
+    private int levelNumber;
 
     BehaviourTree tree;
     public GameObject player;
@@ -15,13 +17,15 @@ public class EnemyAI : MonoBehaviour
     public bool playerInRange = false;
     private SphereCollider rangeCollider;
     private PlayerHealthController playerHealth;
+    private KeyGenerator keyGenerator;
+    PlayerMusicPlayer playerMusicPlayer;
 
     [Header("Combat Settings")]
     public int currentHealth = 100;
     public int maxHealth = 100;
     public int attackTimer = 1;
     public float attackRange = 2;
-    public float attackDamage = 10;
+    public float attackDamage = 2;
 
     [Header("Roam Settings")]
     Vector3 roamGoal;
@@ -43,6 +47,15 @@ public class EnemyAI : MonoBehaviour
         // Audio
         enemyMusicPlayer = FindObjectOfType<EnemyMusicPlayer>();
         Debug.Log("Audio Enemy Player: " + enemyMusicPlayer.ToString());
+        playerMusicPlayer = FindObjectOfType<PlayerMusicPlayer>();
+
+        // Key generation
+        keyGenerator = GetComponent<KeyGenerator>();
+
+        // Game Manager for level number increase attack damager each level e.g. Level 2 attack x 1.2
+        gameManager = FindObjectOfType<GameManager>();
+        levelNumber = gameManager.GetLevelNumber();
+        attackDamage *= 1.0f + (0.01f * (levelNumber - 1));
 
         // Sets homepoint so enemy knows where to return to.
         if (homePosition == Vector3.zero)
@@ -167,6 +180,8 @@ public class EnemyAI : MonoBehaviour
                 if (player != null && playerHealth.health > 0)
                 {
                     playerHealth.health -= attackDamage;
+                    playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Hurt);
+
                     if (playerHealth.health < 0)
                     {
                         playerHealth.health = 0;
@@ -269,7 +284,6 @@ public class EnemyAI : MonoBehaviour
         {
             if (raycastInfo.transform.gameObject.tag == "Player")
             {
-                enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Alert);
                 return true;
             }
         }
@@ -299,6 +313,8 @@ public class EnemyAI : MonoBehaviour
         {
             currentHealth -= damage;
             enemyAnimator.SetTrigger("isHurt");
+            keyGenerator.CheckDrop();
+            enemyMusicPlayer.SetEnemyState(EnemyMusicPlayer.EnemyState.Alert);
         }
     }
 

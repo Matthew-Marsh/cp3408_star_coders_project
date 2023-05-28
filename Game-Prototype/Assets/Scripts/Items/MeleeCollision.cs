@@ -9,13 +9,15 @@ public class MeleeCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        Debug.Log("Checking Trigger " + isDamageAvailable.ToString());
+
         if (isDamageAvailable == false)
         {
             return;
         }
 
         // If object collision is tagged with Enemy then enemy takes damage and put on cooldown
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.CompareTag("Enemy"))
         {
             Debug.Log("Enter");
             GameObject enemy = collision.gameObject;
@@ -28,7 +30,7 @@ public class MeleeCollision : MonoBehaviour
                 if (equippedWeapon != null)
                 {
                     int damage = equippedWeapon.GenereateDamage();
-                    Debug.Log("Damage: " + damage);
+                    Debug.Log("Player Does Damage: " + damage);
                     enemy.GetComponent<EnemyAI>().TakeDamage(damage);
                 }
             }

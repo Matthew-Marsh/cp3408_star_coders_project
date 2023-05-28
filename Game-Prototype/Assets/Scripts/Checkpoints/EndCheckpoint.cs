@@ -26,7 +26,7 @@ public class EndCheckpoint : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             PlayAudioClip(victoryAudio);
-            gameManager.HandleLevelSuccess();
+            gameManager.DisplayLevelComplete();
         }
     }
 

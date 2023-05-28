@@ -142,6 +142,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterState: 0
-  idleClips: []
-  attackClips: []
-  inMenuClips: []
+  idleClips:
+  - {fileID: 8300000, guid: c6c5cd0ee2d7db447be3ac0e13978c23, type: 3}
+  - {fileID: 8300000, guid: 882f38efd0b3ac648b6aad20ea575499, type: 3}
+  - {fileID: 8300000, guid: fb273957e7edc6a4fb4bc7a4449bd241, type: 3}
+  attackClips:
+  - {fileID: 8300000, guid: 5a1944aa7c9b294499f993b3c5b484f5, type: 3}
+  - {fileID: 8300000, guid: 3f9d2a49059160546818cd858b1adc43, type: 3}
+  - {fileID: 8300000, guid: 610e8d1ba6c503040950a7e96659c759, type: 3}
+  inMenuClips:
+  - {fileID: 8300000, guid: 3aa8f1d7601a19d4c88dcaaa262c2e06, type: 3}
+  - {fileID: 8300000, guid: b82b0d87309722341a8926c780d9426d, type: 3}

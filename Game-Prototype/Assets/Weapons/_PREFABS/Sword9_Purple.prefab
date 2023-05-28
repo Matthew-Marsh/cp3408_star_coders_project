@@ -124,10 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fabb7d640c719545af81b31d30fc884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Sword Of Darkness
+  displayName: Sword Of Chaos
   icon: {fileID: 21300000, guid: 47a503ee9c0040b45ad2d15fb9fd4423, type: 3}
-  minDamage: 18
-  maxDamage: 20
+  minDamage: 2
+  maxDamage: 40
 --- !u!114 &1187430466466711813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coolDownDuration: 2
+  coolDownDuration: 1

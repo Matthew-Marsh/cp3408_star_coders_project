@@ -1,11 +1,10 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     GameManager gameManager;
-    
+
     [Header("Player Control")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -31,9 +30,12 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     bool isSprinting;
     bool isAlive = true;
-   
+    public bool isMoving;
+    private bool isInIdleCooldown = false;
+
     PlayerHealthController health;
     GameObject weapon;
+    PlayerMusicPlayer playerMusicPlayer;
 
     private void Awake()
     {
@@ -42,9 +44,9 @@ public class PlayerController : MonoBehaviour
         playerAudioSource = GetComponent<AudioSource>();
         Debug.Log("Audio: " + worldMusicPlayer.ToString());
         Debug.Log("Audio: " + playerAudioSource.ToString());
+        playerMusicPlayer = FindObjectOfType<PlayerMusicPlayer>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         inventory = FindObjectOfType<InventorySystem>();
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     void MovementControl()
     {
-        bool isMoving = false;
+        isMoving = false;
         Vector3 movement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.A))
@@ -104,25 +106,89 @@ public class PlayerController : MonoBehaviour
                 isSprinting = false;
             }
 
-            //if (CanMove(movement))  // Stops going through objects/walls
+            //if (CanMove(movement))  // Stops going through objects/walls - Testing purposes only
             //{
-                movement.y = 0f;
-                movement.Normalize();
-                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+            movement.y = 0f;
+            movement.Normalize();
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
 
+            // Determine which animation to use
+            if (Input.GetKey(KeyCode.W))
+            {
                 if (isSprinting)
                     anim.SetTrigger("isRunFwd");
                 else
                     anim.SetTrigger("isWalkFwd");
-
-                transform.position += movement * speed * Time.deltaTime;
             }
-            else
+            else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
             {
-                anim.SetTrigger("isIdle");
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
             }
+            else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunFwd");
+                else
+                    anim.SetTrigger("isWalkFwd");
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBack");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBck");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunBck");
+                else
+                    anim.SetTrigger("isWalkBck");
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunLeft");
+                else
+                    anim.SetTrigger("isWalkLeft");
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                if (isSprinting)
+                    anim.SetTrigger("isRunRight");
+                else
+                    anim.SetTrigger("isWalkRight");
+            }
+
+            transform.position += movement * speed * Time.deltaTime;
+        }
+        else
+        {
+            anim.SetTrigger("isIdle");
+            if (!isInIdleCooldown)
+            {
+                playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Idle);
+                isInIdleCooldown = true;
+            }
+            Invoke("DelayedIdleState", 20f);
+        }
         //}
+    }
+
+    private void DelayedIdleState()
+    {
+        isInIdleCooldown = false;
     }
 
     // Disables the box collider on the players weapon
@@ -148,6 +214,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             anim.Play("MeeleeAttack_TwoHanded");
+            playerMusicPlayer.SetPlayerState(PlayerMusicPlayer.PlayerState.Attacking);
             Invoke("EnableWeaponBoxCollider", 1);
             Invoke("DisableWeaponBoxCollider", 2); // Disables cooldown to prevent players walking into enemys to cause damage
             StartCoroutine(StartCooldown());
@@ -161,7 +228,6 @@ public class PlayerController : MonoBehaviour
         isWeaponAvailable = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isAlive == true)
@@ -170,9 +236,7 @@ public class PlayerController : MonoBehaviour
             AttackControl();
 
             // this code controls the player character following the mouse position
-            
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            //Debug.Log(cameraRay.ToString());
             Plane groundPlane = new Plane(Vector3.up, new Vector3(0, floorAdjustmentYAxis, 0));
             float rayLength;
 
@@ -242,6 +306,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Check if the raycast hits a collider e.g. objects, walls, enemies
+    // Was required for initial testing
     bool CanMove(Vector3 movement)
     {
         float rayDistance = speed * Time.deltaTime;
@@ -275,9 +340,19 @@ public class PlayerController : MonoBehaviour
             if (collider.CompareTag("Key"))
             {
                 gameManager.IncrementKeys();
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                PlayAudioClip(inventoryPickUpAudio, playerAudioSource);
+                Destroy(lootItem.gameObject);
+                inventory.numberOfKeysText.text = gameManager.GetNumberOfKeys().ToString();
+                Debug.Log("Key picked up.");
             }
-
-            if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
+            else if (collider.CompareTag("HealthDrop"))
+            {
+                LootItem lootItem = collider.GetComponent<LootItem>();
+                health.AddHealth(10);
+                Destroy(lootItem.gameObject);
+            }
+            else if (collider.CompareTag("Loot") || collider.CompareTag("Weapon"))
             {
                 LootItem lootItem = collider.GetComponent<LootItem>();
                 if (lootItem != null && !lootItem.IsClaimed())

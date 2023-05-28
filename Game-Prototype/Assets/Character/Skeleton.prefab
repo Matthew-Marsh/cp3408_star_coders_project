@@ -2272,7 +2272,7 @@ GameObject:
   - component: {fileID: 8151645435431585097}
   m_Layer: 2
   m_Name: Skeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2336,11 +2336,11 @@ MonoBehaviour:
   player: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
   onCoolDown: 0
   playerInRange: 0
-  currentHealth: 100
-  maxHealth: 100
+  currentHealth: 10
+  maxHealth: 10
   attackTimer: 1
   attackRange: 2
-  attackDamage: 10
+  attackDamage: 2
   walkLimits: {x: 30, y: 30, z: 30}
 --- !u!195 &774330855
 NavMeshAgent:
@@ -2376,16 +2376,16 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.416
+  m_Volume: 0.177
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 158
+  Priority: 208
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 5
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -2473,8 +2473,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyIdleAudioCoolDown: 30
-  enemyAttackAudioCoolDown: 3
-  enemyAlertAudioCoolDown: 10
+  enemyAttackAudioCoolDown: 10
+  enemyAlertAudioCoolDown: 20
   enemyState: 0
   idleClips:
   - {fileID: 8300000, guid: 2bffc6a78a1534549a1ab2124a23ea39, type: 3}
@@ -2494,8 +2494,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 73f75434beded40448638d8bc70ba0d2, type: 3}
   - {fileID: 8300000, guid: f16dc0fbd545dfa4baed4d4cc49251b2, type: 3}
   AlertClips:
-  - {fileID: 8300000, guid: f607f649de9166e46b76be5de6cf16b7, type: 3}
-  - {fileID: 8300000, guid: ea74277b6fa7e614686a38879ef974dd, type: 3}
+  - {fileID: 8300000, guid: 05d0536a3eefc80438f95f9662331f52, type: 3}
+  - {fileID: 8300000, guid: 2ee71cfc2c8d7334abb8ad72203c0068, type: 3}
+  - {fileID: 8300000, guid: 2b202aff8c946d745a2ab81e2cd60819, type: 3}
+  - {fileID: 8300000, guid: e4b15ccc6c1d8aa44be86a9f01a22c0f, type: 3}
+  - {fileID: 8300000, guid: 5672cb5df4b75c3479ad96959813e311, type: 3}
+  - {fileID: 8300000, guid: 79577ba19ce26b14091cadef83842225, type: 3}
+  - {fileID: 8300000, guid: 471cc7b80fcd51e4a9055d009dbed822, type: 3}
+  - {fileID: 8300000, guid: 3da1bf3e1e846084b90f743508ad7324, type: 3}
+  - {fileID: 8300000, guid: 7d9c67a3f6e2ebd4fa1cfa6f0e5c2d1b, type: 3}
+  - {fileID: 8300000, guid: b632ae8aac24f7441976016a846e559b, type: 3}
+  - {fileID: 8300000, guid: 373bf7a0b81fa3140b2271b4eb858d3d, type: 3}
 --- !u!114 &8151645435431585097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2509,8 +2518,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropObject: {fileID: 374289202576707483, guid: 78df1db2fbc8ec64f949fac0c05bf693, type: 3}
-  dropChance: 0.3
-  dropDelay: 60
+  bonusDropObject: {fileID: 1000013846074356, guid: cf5713ea55ad24547a3de1a474f2e938, type: 3}
+  dropChance: 0.25
+  bonusDropChance: 0.1
 --- !u!1 &1813734462565108
 GameObject:
   m_ObjectHideFlags: 0

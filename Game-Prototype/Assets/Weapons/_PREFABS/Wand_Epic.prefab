@@ -126,8 +126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Fairy Wand
   icon: {fileID: 21300000, guid: 97d95e9aeb13f314da49aee0bcd4690f, type: 3}
-  minDamage: 18
-  maxDamage: 20
+  minDamage: 15
+  maxDamage: 30
 --- !u!114 &1159290445991748732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510db455829797e40970251d1f159def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coolDownDuration: 2
+  coolDownDuration: 1

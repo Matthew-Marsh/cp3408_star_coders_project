@@ -46,3 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: []
   inventoryText: {fileID: 0}
+  currentItemIcon: {fileID: 0}
+  currentDamageRangeText: {fileID: 0}
+  currentEquipItemIcon: {fileID: 0}
+  numberOfKeysText: {fileID: 0}
+  levelNumberText: {fileID: 0}
