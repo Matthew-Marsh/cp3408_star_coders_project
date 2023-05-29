@@ -3300,11 +3300,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815589, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: spawnTimer
-      value: 90
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815589, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: numberEnemiesToSpawn
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815590, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: m_RootOrder
@@ -7499,11 +7499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815589, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: spawnTimer
-      value: 90
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815589, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: numberEnemiesToSpawn
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4316065301194815590, guid: 29c264d4467834848a394237b0b75134, type: 3}
       propertyPath: m_RootOrder
