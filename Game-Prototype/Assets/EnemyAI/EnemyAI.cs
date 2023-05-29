@@ -230,7 +230,7 @@ public class EnemyAI : MonoBehaviour
         float randomXPoint = Random.Range(-walkLimits.x, walkLimits.x);
         float randomZPoint = Random.Range(-walkLimits.z, walkLimits.z);
 
-        roamGoal = new Vector3(homePosition.x + randomXPoint, 0, homePosition.z + randomZPoint);
+        roamGoal = new Vector3(homePosition.x + randomXPoint, -3, homePosition.z + randomZPoint);
 
         NavMeshPath navMeshPath = new NavMeshPath();
         if (agent.CalculatePath(roamGoal, navMeshPath) && navMeshPath.status == NavMeshPathStatus.PathComplete)

@@ -2333,7 +2333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 95026947950475570}
-  player: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+  player: {fileID: 0}
   onCoolDown: 0
   playerInRange: 0
   currentHealth: 40
@@ -2341,7 +2341,7 @@ MonoBehaviour:
   attackTimer: 5
   attackRange: 2
   attackDamage: 2
-  walkLimits: {x: 30, y: 30, z: 30}
+  walkLimits: {x: 10, y: 30, z: 10}
 --- !u!195 &774330855
 NavMeshAgent:
   m_ObjectHideFlags: 0

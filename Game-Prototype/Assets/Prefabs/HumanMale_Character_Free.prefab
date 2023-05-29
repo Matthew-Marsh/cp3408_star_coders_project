@@ -2556,8 +2556,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddd3f0ef2b8d6443b50096a591e524b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  sprintSpeed: 10
+  walkSpeed: 4
+  sprintSpeed: 6
   isWeaponAvailable: 1
   coolDownDuration: 2
   floorAdjustmentYAxis: -3.004844
