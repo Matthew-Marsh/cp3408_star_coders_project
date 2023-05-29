@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.S))
             {
                 if (isSprinting)
-                    anim.SetTrigger("isRunBack");
+                    anim.SetTrigger("isRunBck");
                 else
                     anim.SetTrigger("isWalkBck");
             }
